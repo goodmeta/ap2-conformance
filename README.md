@@ -74,6 +74,10 @@ process.exit(report.conformant ? 0 : 1);
 
 In another language? The vectors are plain JSON. [VECTORS.md](VECTORS.md) documents the schema, how to drive each category, the canonical evaluation clock, and the two quirks you need to handle (the base64url-DER x5c encoding and the two `repr`-bearing AP2 violation messages).
 
+## Make your verifier testable over HTTP
+
+Expose one endpoint matching [CONTRACT.md](CONTRACT.md) and the live runner can test your verifier at its URL (chain category). Fastest path: paste [CONFORM-PROMPT.md](CONFORM-PROMPT.md) into your coding agent — it wires a keyless `/conform/verify-chain` to your existing verifier.
+
 ## Provenance & reproducibility
 
 - **Vectors:** minted by AP2's reference SDK at commit `e1ea56db72a6385bce3e5c1112b3a56ce60acb43`. See [`generators/`](generators/) to regenerate them yourself.
