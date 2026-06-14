@@ -195,7 +195,20 @@
   const httpBase = location.origin && location.origin.startsWith("http") ? location.origin : "https://ap2conformance.dev";
   targetInput.value = httpBase + "/api/verify-chain";
 
+  const CONTRACT_URL = "https://github.com/goodmeta/ap2-conformance/blob/main/CONTRACT.md";
   function renderLive(rep) {
+    if (rep.status === "BLOCKED") {
+      runnerOut.innerHTML = `<div class="runner-status err">⛔ ${esc(rep.error || "target rejected")}</div>`;
+      return;
+    }
+    if (rep.status === "DID_NOT_IMPLEMENT_CONTRACT" || rep.endpointSpeaksContract === false) {
+      runnerOut.innerHTML =
+        `<div class="runner-head warn"><span class="rh-verdict">⚠ not a conformance endpoint</span>` +
+        `<span class="rh-counts">0/${rep.totalVectors || 0} vectors got a contract response</span>` +
+        `<span class="rh-target">${esc(rep.target)}</span></div>` +
+        `<p class="runner-note">${esc(rep.note || "")} Implement <a href="${CONTRACT_URL}" target="_blank" rel="noopener">CONTRACT.md</a> to make your verifier testable.</p>`;
+      return;
+    }
     const pass = rep.conformant;
     const rows = rep.results
       .map(

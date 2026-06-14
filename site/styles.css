@@ -254,9 +254,11 @@ em { font-style: normal; color: var(--text); }
 .runner-head { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 14px 16px; border-radius: 11px; border: 1px solid var(--border); background: var(--surface-2); margin-bottom: 14px; }
 .runner-head.pass { border-color: rgba(70,224,160,0.35); }
 .runner-head.fail { border-color: rgba(255,107,128,0.35); }
+.runner-head.warn { border-color: rgba(255,197,77,0.4); }
 .rh-verdict { font-family: var(--display); font-weight: 600; font-size: 15px; }
 .runner-head.pass .rh-verdict { color: var(--green); }
 .runner-head.fail .rh-verdict { color: var(--red); }
+.runner-head.warn .rh-verdict { color: var(--amber); }
 .rh-counts { font-family: var(--mono); font-size: 13px; color: var(--muted); }
 .rh-target { font-family: var(--mono); font-size: 12px; color: var(--faint); margin-left: auto; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .runner-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 4px 18px; }
