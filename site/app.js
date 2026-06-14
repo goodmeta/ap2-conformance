@@ -194,8 +194,24 @@
   const runnerOut = $("#runnerOut");
   const httpBase = location.origin && location.origin.startsWith("http") ? location.origin : "https://ap2conformance.dev";
   targetInput.value = httpBase + "/api/verify-chain";
+  const sharedTarget = new URLSearchParams(location.search).get("target");
+  if (sharedTarget) targetInput.value = sharedTarget;
 
   const CONTRACT_URL = "https://github.com/goodmeta/ap2-conformance/blob/main/CONTRACT.md";
+
+  function shareBlock(target) {
+    if (!location.origin.startsWith("http")) return ""; // share links need a real host
+    const shareUrl = `${location.origin}/?target=${encodeURIComponent(target)}`;
+    const badgeUrl = `${location.origin}/api/badge?target=${encodeURIComponent(target)}`;
+    const md = `![AP2 conformance](${badgeUrl})`;
+    return (
+      `<div class="share">` +
+      `<div class="share-row"><span class="share-k">Share this run</span><code class="share-v">${esc(shareUrl)}</code><button class="btn small copy" data-copy="${esc(shareUrl)}">copy</button></div>` +
+      `<div class="share-row"><span class="share-k">Embed badge</span><code class="share-v">${esc(md)}</code><button class="btn small copy" data-copy="${esc(md)}">copy</button></div>` +
+      `<div class="share-badge"><img alt="AP2 conformance badge" src="${esc(badgeUrl)}" /></div>` +
+      `</div>`
+    );
+  }
   function renderLive(rep) {
     if (rep.status === "BLOCKED") {
       runnerOut.innerHTML = `<div class="runner-status err">⛔ ${esc(rep.error || "target rejected")}</div>`;
@@ -221,7 +237,8 @@
       `<span class="rh-counts">${rep.core.passed}/${rep.core.total} core · ${rep.hardening.passed}/${rep.hardening.total} hardening</span>` +
       `<span class="rh-target">${esc(rep.target)}</span></div>` +
       `<div class="runner-grid">${rows}</div>` +
-      `<p class="runner-note">${esc(rep.note || "")}</p>`;
+      `<p class="runner-note">${esc(rep.note || "")}</p>` +
+      shareBlock(rep.target);
   }
 
   async function runLive() {
@@ -245,6 +262,20 @@
     }
   }
   runBtn.addEventListener("click", runLive);
+
+  // copy buttons inside the result (share link / badge markdown)
+  runnerOut.addEventListener("click", (e) => {
+    const b = e.target && e.target.closest && e.target.closest(".copy");
+    if (!b || !navigator.clipboard) return;
+    navigator.clipboard.writeText(b.getAttribute("data-copy") || "").then(() => {
+      const prev = b.textContent;
+      b.textContent = "copied ✓";
+      setTimeout(() => (b.textContent = prev), 1200);
+    });
+  });
+
+  // a shared ?target= link auto-runs on load
+  if (sharedTarget) runLive();
 
   /* ---------- scroll reveal ---------- */
   const revealIO = new IntersectionObserver((entries) => {
