@@ -1,0 +1,752 @@
+[
+  {
+    "name": "merchants_pass",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.allowed_merchants",
+          "allowed": [
+            {
+              "id": "s-1",
+              "name": "Shop",
+              "website": "shop.example"
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "checkout": {
+      "id": "co_1",
+      "merchant": {
+        "id": "s-1",
+        "name": "Shop",
+        "website": "shop.example"
+      },
+      "line_items": [],
+      "status": "completed",
+      "currency": "USD",
+      "totals": [
+        {
+          "type": "total",
+          "amount": 0
+        }
+      ],
+      "links": [
+        {
+          "type": "self",
+          "url": "https://shop.example/checkout"
+        }
+      ]
+    },
+    "ap2Violations": [],
+    "valid": true
+  },
+  {
+    "name": "merchants_fail",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.allowed_merchants",
+          "allowed": [
+            {
+              "id": "other",
+              "name": "Other"
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "checkout": {
+      "id": "co_1",
+      "merchant": {
+        "id": "s-1",
+        "name": "Shop",
+        "website": "shop.example"
+      },
+      "line_items": [],
+      "status": "completed",
+      "currency": "USD",
+      "totals": [
+        {
+          "type": "total",
+          "amount": 0
+        }
+      ],
+      "links": [
+        {
+          "type": "self",
+          "url": "https://shop.example/checkout"
+        }
+      ]
+    },
+    "ap2Violations": [
+      "Merchant Shop not in allowed list"
+    ],
+    "valid": false
+  },
+  {
+    "name": "merchants_missing",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.allowed_merchants",
+          "allowed": [
+            {
+              "id": "s-1",
+              "name": "Shop",
+              "website": "shop.example"
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "checkout": {
+      "id": "co_1",
+      "line_items": [],
+      "status": "completed",
+      "currency": "USD",
+      "totals": [
+        {
+          "type": "total",
+          "amount": 0
+        }
+      ],
+      "links": [
+        {
+          "type": "self",
+          "url": "https://shop.example/checkout"
+        }
+      ]
+    },
+    "ap2Violations": [
+      "Missing merchant in checkout"
+    ],
+    "valid": false
+  },
+  {
+    "name": "line_items_simple_pass",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "checkout": {
+      "id": "co_1",
+      "line_items": [
+        {
+          "id": "li_A",
+          "item": {
+            "id": "A",
+            "title": "A",
+            "price": 0
+          },
+          "quantity": 1,
+          "totals": [
+            {
+              "type": "total",
+              "amount": 0
+            }
+          ]
+        }
+      ],
+      "status": "completed",
+      "currency": "USD",
+      "totals": [
+        {
+          "type": "total",
+          "amount": 0
+        }
+      ],
+      "links": [
+        {
+          "type": "self",
+          "url": "https://shop.example/checkout"
+        }
+      ]
+    },
+    "ap2Violations": [],
+    "valid": true
+  },
+  {
+    "name": "line_items_degree1_pass",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                }
+              ],
+              "quantity": 1
+            },
+            {
+              "id": "r2",
+              "acceptable_items": [
+                {
+                  "id": "B",
+                  "title": "B"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "checkout": {
+      "id": "co_1",
+      "line_items": [
+        {
+          "id": "li_A",
+          "item": {
+            "id": "A",
+            "title": "A",
+            "price": 0
+          },
+          "quantity": 1,
+          "totals": [
+            {
+              "type": "total",
+              "amount": 0
+            }
+          ]
+        },
+        {
+          "id": "li_B",
+          "item": {
+            "id": "B",
+            "title": "B",
+            "price": 0
+          },
+          "quantity": 1,
+          "totals": [
+            {
+              "type": "total",
+              "amount": 0
+            }
+          ]
+        }
+      ],
+      "status": "completed",
+      "currency": "USD",
+      "totals": [
+        {
+          "type": "total",
+          "amount": 0
+        }
+      ],
+      "links": [
+        {
+          "type": "self",
+          "url": "https://shop.example/checkout"
+        }
+      ]
+    },
+    "ap2Violations": [],
+    "valid": true
+  },
+  {
+    "name": "line_items_not_acceptable",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "checkout": {
+      "id": "co_1",
+      "line_items": [
+        {
+          "id": "li_B",
+          "item": {
+            "id": "B",
+            "title": "B",
+            "price": 0
+          },
+          "quantity": 1,
+          "totals": [
+            {
+              "type": "total",
+              "amount": 0
+            }
+          ]
+        }
+      ],
+      "status": "completed",
+      "currency": "USD",
+      "totals": [
+        {
+          "type": "total",
+          "amount": 0
+        }
+      ],
+      "links": [
+        {
+          "type": "self",
+          "url": "https://shop.example/checkout"
+        }
+      ]
+    },
+    "ap2Violations": [
+      "Item B not in any requirement's acceptable items"
+    ],
+    "valid": false
+  },
+  {
+    "name": "line_items_oversupply",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "checkout": {
+      "id": "co_1",
+      "line_items": [
+        {
+          "id": "li_A",
+          "item": {
+            "id": "A",
+            "title": "A",
+            "price": 0
+          },
+          "quantity": 2,
+          "totals": [
+            {
+              "type": "total",
+              "amount": 0
+            }
+          ]
+        }
+      ],
+      "status": "completed",
+      "currency": "USD",
+      "totals": [
+        {
+          "type": "total",
+          "amount": 0
+        }
+      ],
+      "links": [
+        {
+          "type": "self",
+          "url": "https://shop.example/checkout"
+        }
+      ]
+    },
+    "ap2Violations": [
+      "Cannot satisfy line item constraints: A (1) could not be assigned to any requirement slot"
+    ],
+    "valid": false
+  },
+  {
+    "name": "line_items_wildcard_pass",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [],
+              "quantity": 5
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "checkout": {
+      "id": "co_1",
+      "line_items": [
+        {
+          "id": "li_A",
+          "item": {
+            "id": "A",
+            "title": "A",
+            "price": 0
+          },
+          "quantity": 2,
+          "totals": [
+            {
+              "type": "total",
+              "amount": 0
+            }
+          ]
+        },
+        {
+          "id": "li_B",
+          "item": {
+            "id": "B",
+            "title": "B",
+            "price": 0
+          },
+          "quantity": 1,
+          "totals": [
+            {
+              "type": "total",
+              "amount": 0
+            }
+          ]
+        }
+      ],
+      "status": "completed",
+      "currency": "USD",
+      "totals": [
+        {
+          "type": "total",
+          "amount": 0
+        }
+      ],
+      "links": [
+        {
+          "type": "self",
+          "url": "https://shop.example/checkout"
+        }
+      ]
+    },
+    "ap2Violations": [],
+    "valid": true
+  },
+  {
+    "name": "line_items_complex_pass",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                },
+                {
+                  "id": "B",
+                  "title": "B"
+                }
+              ],
+              "quantity": 1
+            },
+            {
+              "id": "r2",
+              "acceptable_items": [
+                {
+                  "id": "B",
+                  "title": "B"
+                },
+                {
+                  "id": "C",
+                  "title": "C"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "checkout": {
+      "id": "co_1",
+      "line_items": [
+        {
+          "id": "li_B",
+          "item": {
+            "id": "B",
+            "title": "B",
+            "price": 0
+          },
+          "quantity": 2,
+          "totals": [
+            {
+              "type": "total",
+              "amount": 0
+            }
+          ]
+        }
+      ],
+      "status": "completed",
+      "currency": "USD",
+      "totals": [
+        {
+          "type": "total",
+          "amount": 0
+        }
+      ],
+      "links": [
+        {
+          "type": "self",
+          "url": "https://shop.example/checkout"
+        }
+      ]
+    },
+    "ap2Violations": [],
+    "valid": true
+  },
+  {
+    "name": "line_items_complex_fail",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                },
+                {
+                  "id": "B",
+                  "title": "B"
+                }
+              ],
+              "quantity": 1
+            },
+            {
+              "id": "r2",
+              "acceptable_items": [
+                {
+                  "id": "B",
+                  "title": "B"
+                },
+                {
+                  "id": "C",
+                  "title": "C"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "checkout": {
+      "id": "co_1",
+      "line_items": [
+        {
+          "id": "li_B",
+          "item": {
+            "id": "B",
+            "title": "B",
+            "price": 0
+          },
+          "quantity": 3,
+          "totals": [
+            {
+              "type": "total",
+              "amount": 0
+            }
+          ]
+        }
+      ],
+      "status": "completed",
+      "currency": "USD",
+      "totals": [
+        {
+          "type": "total",
+          "amount": 0
+        }
+      ],
+      "links": [
+        {
+          "type": "self",
+          "url": "https://shop.example/checkout"
+        }
+      ]
+    },
+    "ap2Violations": [
+      "Cannot satisfy line item constraints: B (1) could not be assigned to any requirement slot"
+    ],
+    "valid": false
+  },
+  {
+    "name": "line_items_empty_cart",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "checkout": {
+      "id": "co_1",
+      "line_items": [],
+      "status": "completed",
+      "currency": "USD",
+      "totals": [
+        {
+          "type": "total",
+          "amount": 0
+        }
+      ],
+      "links": [
+        {
+          "type": "self",
+          "url": "https://shop.example/checkout"
+        }
+      ]
+    },
+    "ap2Violations": [
+      "Empty cart does not satisfy line_items constraint"
+    ],
+    "valid": false
+  }
+]

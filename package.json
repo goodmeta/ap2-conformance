@@ -1,0 +1,43 @@
+{
+  "name": "@goodmeta/ap2-conformance",
+  "version": "0.1.0",
+  "description": "Open, implementation-agnostic conformance vectors + runner for AP2 (Agent Payments Protocol) mandate verification. Vectors minted from AP2's own reference SDK.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "conformance": "tsx src/run.ts",
+    "build": "rm -rf dist && tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx src/run.ts"
+  },
+  "files": [
+    "dist",
+    "vectors",
+    "VECTORS.md",
+    "CONFORMANCE.md",
+    "GLOSSARY.md",
+    "README.md"
+  ],
+  "keywords": [
+    "ap2",
+    "agent-payments-protocol",
+    "conformance",
+    "test-vectors",
+    "sd-jwt",
+    "dsd-jwt",
+    "mandate"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@goodmeta/agent-verifier": "0.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.42",
+    "tsx": "4.22.4",
+    "typescript": "5.9.3"
+  }
+}

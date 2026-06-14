@@ -1,0 +1,141 @@
+{
+  "checkoutChains": [
+    {
+      "name": "cc_valid",
+      "open": {
+        "vct": "mandate.checkout.open.1",
+        "constraints": [
+          {
+            "type": "checkout.allowed_merchants",
+            "allowed": [
+              {
+                "id": "s-1",
+                "name": "Shop",
+                "website": "shop.example"
+              }
+            ]
+          },
+          {
+            "type": "checkout.line_items",
+            "items": [
+              {
+                "id": "r1",
+                "acceptable_items": [
+                  {
+                    "id": "A",
+                    "title": "A"
+                  }
+                ],
+                "quantity": 1
+              }
+            ]
+          }
+        ],
+        "cnf": {
+          "jwk": {
+            "kty": "EC",
+            "crv": "P-256",
+            "x": "x",
+            "y": "y"
+          }
+        }
+      },
+      "closed": {
+        "vct": "mandate.checkout.1",
+        "checkout_jwt": "eyJhbGciOiAiRVMyNTYiLCAidHlwIjogIkpXVCJ9.eyJpZCI6ICJjb18xIiwgIm1lcmNoYW50IjogeyJpZCI6ICJzLTEiLCAibmFtZSI6ICJTaG9wIiwgIndlYnNpdGUiOiAic2hvcC5leGFtcGxlIn0sICJsaW5lX2l0ZW1zIjogW3siaWQiOiAibGlfQSIsICJpdGVtIjogeyJpZCI6ICJBIiwgInRpdGxlIjogIkEiLCAicHJpY2UiOiAwfSwgInF1YW50aXR5IjogMSwgInRvdGFscyI6IFt7InR5cGUiOiAidG90YWwiLCAiYW1vdW50IjogMH1dfV0sICJzdGF0dXMiOiAiY29tcGxldGVkIiwgImN1cnJlbmN5IjogIlVTRCIsICJ0b3RhbHMiOiBbeyJ0eXBlIjogInRvdGFsIiwgImFtb3VudCI6IDB9XSwgImxpbmtzIjogW3sidHlwZSI6ICJzZWxmIiwgInVybCI6ICJodHRwczovL3Nob3AuZXhhbXBsZS9jaGVja291dCJ9XX0.sig",
+        "checkout_hash": "S2VcwHtpyGXHh_mq29GESt10HYJj6YAgQOYfZSr_bWQ"
+      },
+      "ap2Violations": [],
+      "tamperHash": false
+    },
+    {
+      "name": "cc_constraint_fail",
+      "open": {
+        "vct": "mandate.checkout.open.1",
+        "constraints": [
+          {
+            "type": "checkout.allowed_merchants",
+            "allowed": [
+              {
+                "id": "other",
+                "name": "Other"
+              }
+            ]
+          }
+        ],
+        "cnf": {
+          "jwk": {
+            "kty": "EC",
+            "crv": "P-256",
+            "x": "x",
+            "y": "y"
+          }
+        }
+      },
+      "closed": {
+        "vct": "mandate.checkout.1",
+        "checkout_jwt": "eyJhbGciOiAiRVMyNTYiLCAidHlwIjogIkpXVCJ9.eyJpZCI6ICJjb18xIiwgIm1lcmNoYW50IjogeyJpZCI6ICJzLTEiLCAibmFtZSI6ICJTaG9wIiwgIndlYnNpdGUiOiAic2hvcC5leGFtcGxlIn0sICJsaW5lX2l0ZW1zIjogW3siaWQiOiAibGlfQSIsICJpdGVtIjogeyJpZCI6ICJBIiwgInRpdGxlIjogIkEiLCAicHJpY2UiOiAwfSwgInF1YW50aXR5IjogMSwgInRvdGFscyI6IFt7InR5cGUiOiAidG90YWwiLCAiYW1vdW50IjogMH1dfV0sICJzdGF0dXMiOiAiY29tcGxldGVkIiwgImN1cnJlbmN5IjogIlVTRCIsICJ0b3RhbHMiOiBbeyJ0eXBlIjogInRvdGFsIiwgImFtb3VudCI6IDB9XSwgImxpbmtzIjogW3sidHlwZSI6ICJzZWxmIiwgInVybCI6ICJodHRwczovL3Nob3AuZXhhbXBsZS9jaGVja291dCJ9XX0.sig",
+        "checkout_hash": "S2VcwHtpyGXHh_mq29GESt10HYJj6YAgQOYfZSr_bWQ"
+      },
+      "ap2Violations": [
+        "Merchant Shop not in allowed list"
+      ],
+      "tamperHash": false
+    },
+    {
+      "name": "cc_tampered_hash",
+      "open": {
+        "vct": "mandate.checkout.open.1",
+        "constraints": [
+          {
+            "type": "checkout.allowed_merchants",
+            "allowed": [
+              {
+                "id": "s-1",
+                "name": "Shop",
+                "website": "shop.example"
+              }
+            ]
+          }
+        ],
+        "cnf": {
+          "jwk": {
+            "kty": "EC",
+            "crv": "P-256",
+            "x": "x",
+            "y": "y"
+          }
+        }
+      },
+      "closed": {
+        "vct": "mandate.checkout.1",
+        "checkout_jwt": "eyJhbGciOiAiRVMyNTYiLCAidHlwIjogIkpXVCJ9.eyJpZCI6ICJjb18xIiwgIm1lcmNoYW50IjogeyJpZCI6ICJzLTEiLCAibmFtZSI6ICJTaG9wIiwgIndlYnNpdGUiOiAic2hvcC5leGFtcGxlIn0sICJsaW5lX2l0ZW1zIjogW3siaWQiOiAibGlfQSIsICJpdGVtIjogeyJpZCI6ICJBIiwgInRpdGxlIjogIkEiLCAicHJpY2UiOiAwfSwgInF1YW50aXR5IjogMSwgInRvdGFscyI6IFt7InR5cGUiOiAidG90YWwiLCAiYW1vdW50IjogMH1dfV0sICJzdGF0dXMiOiAiY29tcGxldGVkIiwgImN1cnJlbmN5IjogIlVTRCIsICJ0b3RhbHMiOiBbeyJ0eXBlIjogInRvdGFsIiwgImFtb3VudCI6IDB9XSwgImxpbmtzIjogW3sidHlwZSI6ICJzZWxmIiwgInVybCI6ICJodHRwczovL3Nob3AuZXhhbXBsZS9jaGVja291dCJ9XX0.sig",
+        "checkout_hash": "S2VcwHtpyGXHh_mq29GESt10HYJj6YAgQOYfZSr_bWA"
+      },
+      "ap2Violations": [],
+      "tamperHash": true
+    }
+  ],
+  "receiptReferences": [
+    {
+      "name": "valid_payment_2hop",
+      "chain": "eyJhbGciOiAiRVMyNTYiLCAidHlwIjogImV4YW1wbGUrc2Qtand0IiwgImtpZCI6ICJ1c2VyLTEifQ.eyJkZWxlZ2F0ZV9wYXlsb2FkIjogW3siLi4uIjogIklrRlJ4RjhCWDJWVHZJalFQNndsSjdfVHBvek0wNndSQm1aTm4tLUNLS2cifV0sICJfc2RfYWxnIjogInNoYS0yNTYifQ.cvDwB_KjuokBzmWkPBe2SP0e7Gv8DaSNpkkohOFzyaNX1iEt_QsT_oTfcBgS6R4FCOwVWiiYmwWWh47ITEFM7w~WyJ0T01tejE5eUE1UDNMSnpTbjlFMERnIiwgeyJ2Y3QiOiAibWFuZGF0ZS5wYXltZW50Lm9wZW4uMSIsICJjb25zdHJhaW50cyI6IFt7InR5cGUiOiAicGF5bWVudC5hbW91bnRfcmFuZ2UiLCAiY3VycmVuY3kiOiAiVVNEIiwgIm1heCI6IDUwMDB9XSwgImNuZiI6IHsiandrIjogeyJjcnYiOiAiUC0yNTYiLCAia2lkIjogImFnZW50LTEiLCAia3R5IjogIkVDIiwgIngiOiAiTW9MZFI0LXRsbW9lM0ZDTDVWZXhQX2txTjgyVExlaVlOZGp2cEFIbG1kOCIsICJ5IjogInJQcUJUWHZsbHRETEctcXZoZndlRXZfRXAzaGMyWEpJb3poeldmVnJWQlkifX19XQ~~eyJhbGciOiAiRVMyNTYiLCAidHlwIjogImtiK3NkLWp3dCIsICJraWQiOiAiYWdlbnQtMSJ9.eyJkZWxlZ2F0ZV9wYXlsb2FkIjogW3siLi4uIjogIjZQX1l6a0txbkNwTnYwUzZZWGpnbDZ4TXU3elZTMlRIaElMUDdFWTJFUk0ifV0sICJpYXQiOiAxNzgwMDAwMDAwLCAiYXVkIjogIm1lcmNoYW50IiwgIm5vbmNlIjogIm5vbmNlLTEiLCAic2RfaGFzaCI6ICJRZnljNHZWT2VJNFJtYVJrTlh3bWxjVU5UVXZ1Z2RhN2xHR2hicjc2NThJIiwgIl9zZF9hbGciOiAic2hhLTI1NiJ9.9lC12-LxtfNJTERwZEPvoM1foPXvUrRsN-ky_DxTg5CKOqYFyZhpPDQ43BzXhOljDnLVsFwWul75NeR5LPsB5w~WyI4dXUwZS1KOVgwQ3VwSzI4S2FXUUdnIiwgeyJ2Y3QiOiAibWFuZGF0ZS5wYXltZW50LjEiLCAidHJhbnNhY3Rpb25faWQiOiAidHhfMSIsICJwYXllZSI6IHsiaWQiOiAicy0xIiwgIm5hbWUiOiAiU2hvcCJ9LCAicGF5bWVudF9hbW91bnQiOiB7ImFtb3VudCI6IDEwMDAsICJjdXJyZW5jeSI6ICJVU0QifSwgInBheW1lbnRfaW5zdHJ1bWVudCI6IHsiaWQiOiAicGktMSIsICJ0eXBlIjogImNyZWRpdCJ9fV0~",
+      "ap2Reference": "dVz7PB7IRqN3h1K3QM05UHJVS1Uuc7EeR3d4s7rnraE"
+    },
+    {
+      "name": "valid_payment_3hop",
+      "chain": "eyJhbGciOiAiRVMyNTYiLCAidHlwIjogImV4YW1wbGUrc2Qtand0IiwgImtpZCI6ICJ1c2VyLTEifQ.eyJkZWxlZ2F0ZV9wYXlsb2FkIjogW3siLi4uIjogIklrRlJ4RjhCWDJWVHZJalFQNndsSjdfVHBvek0wNndSQm1aTm4tLUNLS2cifV0sICJfc2RfYWxnIjogInNoYS0yNTYifQ.cvDwB_KjuokBzmWkPBe2SP0e7Gv8DaSNpkkohOFzyaNX1iEt_QsT_oTfcBgS6R4FCOwVWiiYmwWWh47ITEFM7w~WyJ0T01tejE5eUE1UDNMSnpTbjlFMERnIiwgeyJ2Y3QiOiAibWFuZGF0ZS5wYXltZW50Lm9wZW4uMSIsICJjb25zdHJhaW50cyI6IFt7InR5cGUiOiAicGF5bWVudC5hbW91bnRfcmFuZ2UiLCAiY3VycmVuY3kiOiAiVVNEIiwgIm1heCI6IDUwMDB9XSwgImNuZiI6IHsiandrIjogeyJjcnYiOiAiUC0yNTYiLCAia2lkIjogImFnZW50LTEiLCAia3R5IjogIkVDIiwgIngiOiAiTW9MZFI0LXRsbW9lM0ZDTDVWZXhQX2txTjgyVExlaVlOZGp2cEFIbG1kOCIsICJ5IjogInJQcUJUWHZsbHRETEctcXZoZndlRXZfRXAzaGMyWEpJb3poeldmVnJWQlkifX19XQ~~eyJhbGciOiAiRVMyNTYiLCAidHlwIjogImtiK3NkLWp3dCtrYiIsICJraWQiOiAiYWdlbnQtMSJ9.eyJkZWxlZ2F0ZV9wYXlsb2FkIjogW3siLi4uIjogIi1fdUFsNzlMY1VGX2ZOVVd0TGdsRTV5a1JtNDltcjdJRlRETUJZWTVFSVkifV0sICJpYXQiOiAxNzgwMDAwMDAwLCAiYXVkIjogImNwLWFnZW50IiwgIm5vbmNlIjogImNwLW5vbmNlIiwgInNkX2hhc2giOiAiUWZ5YzR2Vk9lSTRSbWFSa05Yd21sY1VOVFV2dWdkYTdsR0doYnI3NjU4SSIsICJfc2RfYWxnIjogInNoYS0yNTYifQ.RqYQaad0nmtg8cEVbiJETMcl774Ssp5_3-SHjw75Wm2rn3odZIqxEHGX8xDfT4Jdk5QnzPM4IIv0B6T6B4bfbA~WyJoeEI0QTdDbGxqeXdySndNNzlvd0VRIiwgeyJ2Y3QiOiAibWFuZGF0ZS5wYXltZW50Lm9wZW4uMSIsICJjb25zdHJhaW50cyI6IFt7InR5cGUiOiAicGF5bWVudC5hbW91bnRfcmFuZ2UiLCAiY3VycmVuY3kiOiAiVVNEIiwgIm1heCI6IDUwMDB9XSwgImNuZiI6IHsiandrIjogeyJjcnYiOiAiUC0yNTYiLCAia2lkIjogImNwLTEiLCAia3R5IjogIkVDIiwgIngiOiAiT0xXeElnOUlpM0p4SFo3VkJpQ3pLcDd2b3F6V2d5cEFhVC1wZWEtTWwyRSIsICJ5IjogIm9wbXRFTGFuTWNLUDBYdS16UGRYWTJQOXRTa0d0SkNmMzFGUmVpRDJ5cjgifX19XQ~~eyJhbGciOiAiRVMyNTYiLCAidHlwIjogImtiK3NkLWp3dCIsICJraWQiOiAiY3AtMSJ9.eyJkZWxlZ2F0ZV9wYXlsb2FkIjogW3siLi4uIjogIjFNbndScWZfZVM3Y3o2UUluVFlFS3dwT0FkNXNoX3ltWGtUa0tYZnRLczAifV0sICJpYXQiOiAxNzgwMDAwMDAwLCAiYXVkIjogIm1lcmNoYW50IiwgIm5vbmNlIjogIm5vbmNlLTEiLCAic2RfaGFzaCI6ICJid1psUjNMUGhqeU9OWS1pX0Z6VUNLcmg3enNxQ0xtRVFORXBSMUNPcW4wIiwgIl9zZF9hbGciOiAic2hhLTI1NiJ9.qKPMuwptyoSEF80_wMHuXcNr4H44HLEY_r_iL-gtVXajY14DhNxAWF1Hfy1QXTjkRU_s2nq6sy8MNE-_1oXZOg~WyJFWVpsNVEtRWtVbm5vWktwaEdiZmp3IiwgeyJ2Y3QiOiAibWFuZGF0ZS5wYXltZW50LjEiLCAidHJhbnNhY3Rpb25faWQiOiAidHhfMSIsICJwYXllZSI6IHsiaWQiOiAicy0xIiwgIm5hbWUiOiAiU2hvcCJ9LCAicGF5bWVudF9hbW91bnQiOiB7ImFtb3VudCI6IDEwMDAsICJjdXJyZW5jeSI6ICJVU0QifSwgInBheW1lbnRfaW5zdHJ1bWVudCI6IHsiaWQiOiAicGktMSIsICJ0eXBlIjogImNyZWRpdCJ9fV0~",
+      "ap2Reference": "eO88LjTQGBS98eR7ChQghgXO1zCqIOmVquS6J_paluI"
+    },
+    {
+      "name": "valid_payment_3hop_issuer_jwt_hash",
+      "chain": "eyJhbGciOiAiRVMyNTYiLCAidHlwIjogImV4YW1wbGUrc2Qtand0IiwgImtpZCI6ICJ1c2VyLTEifQ.eyJkZWxlZ2F0ZV9wYXlsb2FkIjogW3siLi4uIjogIklrRlJ4RjhCWDJWVHZJalFQNndsSjdfVHBvek0wNndSQm1aTm4tLUNLS2cifV0sICJfc2RfYWxnIjogInNoYS0yNTYifQ.cvDwB_KjuokBzmWkPBe2SP0e7Gv8DaSNpkkohOFzyaNX1iEt_QsT_oTfcBgS6R4FCOwVWiiYmwWWh47ITEFM7w~WyJ0T01tejE5eUE1UDNMSnpTbjlFMERnIiwgeyJ2Y3QiOiAibWFuZGF0ZS5wYXltZW50Lm9wZW4uMSIsICJjb25zdHJhaW50cyI6IFt7InR5cGUiOiAicGF5bWVudC5hbW91bnRfcmFuZ2UiLCAiY3VycmVuY3kiOiAiVVNEIiwgIm1heCI6IDUwMDB9XSwgImNuZiI6IHsiandrIjogeyJjcnYiOiAiUC0yNTYiLCAia2lkIjogImFnZW50LTEiLCAia3R5IjogIkVDIiwgIngiOiAiTW9MZFI0LXRsbW9lM0ZDTDVWZXhQX2txTjgyVExlaVlOZGp2cEFIbG1kOCIsICJ5IjogInJQcUJUWHZsbHRETEctcXZoZndlRXZfRXAzaGMyWEpJb3poeldmVnJWQlkifX19XQ~~eyJhbGciOiAiRVMyNTYiLCAidHlwIjogImtiK3NkLWp3dCtrYiIsICJraWQiOiAiYWdlbnQtMSJ9.eyJkZWxlZ2F0ZV9wYXlsb2FkIjogW3siLi4uIjogIlVESW5MbEZxUzB1ai1hRk1OMG05bzBBTVEtcmd1dUZWT3VQVC1wQW1MMk0ifV0sICJpYXQiOiAxNzgwMDAwMDAwLCAiYXVkIjogImNwLWFnZW50IiwgIm5vbmNlIjogImNwLW5vbmNlIiwgImlzc3Vlcl9qd3RfaGFzaCI6ICJYU0lWWGRvTlk2SjlWamxBN2xlRUlXX08wYTI2bjRVLUVLMzFsdVNQTFRZIiwgIl9zZF9hbGciOiAic2hhLTI1NiJ9.h9bEjRT4y-f2PsKJoz5kdUYmnbnQYriUoYmdYNFHZ1AbjgUqqecDdvPb8uSu7rMBDpWWca8tabvgdF0-MzI6PA~WyJaRDNvdE9uaFZ2Sk81a2pUS3pRYjF3IiwgeyJ2Y3QiOiAibWFuZGF0ZS5wYXltZW50Lm9wZW4uMSIsICJjb25zdHJhaW50cyI6IFt7InR5cGUiOiAicGF5bWVudC5hbW91bnRfcmFuZ2UiLCAiY3VycmVuY3kiOiAiVVNEIiwgIm1heCI6IDUwMDB9XSwgImNuZiI6IHsiandrIjogeyJjcnYiOiAiUC0yNTYiLCAia2lkIjogImNwLTEiLCAia3R5IjogIkVDIiwgIngiOiAiT0xXeElnOUlpM0p4SFo3VkJpQ3pLcDd2b3F6V2d5cEFhVC1wZWEtTWwyRSIsICJ5IjogIm9wbXRFTGFuTWNLUDBYdS16UGRYWTJQOXRTa0d0SkNmMzFGUmVpRDJ5cjgifX19XQ~~eyJhbGciOiAiRVMyNTYiLCAidHlwIjogImtiK3NkLWp3dCIsICJraWQiOiAiY3AtMSJ9.eyJkZWxlZ2F0ZV9wYXlsb2FkIjogW3siLi4uIjogIldTNjg2UHBRWUUxanF3X01CMUkwTXY0SUZQa05WWVVfaUF2ZHRKWHY2R1kifV0sICJpYXQiOiAxNzgwMDAwMDAwLCAiYXVkIjogIm1lcmNoYW50IiwgIm5vbmNlIjogIm5vbmNlLTEiLCAic2RfaGFzaCI6ICJhdXkzck5TMERmcXRwSDlnS0kzeUNVY0NjS3Azc2J0Rjk2bGY2UU9fenc0IiwgIl9zZF9hbGciOiAic2hhLTI1NiJ9.vLPx1coeuwhBHxN4aVpeGfeda9D7qZZ6XIAE4lsk0knUge8lA7nE0LRNMr_JVnIFjarGinuHqmXpPja_N5sZWA~WyIwaUJwRm9Fd195SVg2Q003VUJHdHdnIiwgeyJ2Y3QiOiAibWFuZGF0ZS5wYXltZW50LjEiLCAidHJhbnNhY3Rpb25faWQiOiAidHhfMSIsICJwYXllZSI6IHsiaWQiOiAicy0xIiwgIm5hbWUiOiAiU2hvcCJ9LCAicGF5bWVudF9hbW91bnQiOiB7ImFtb3VudCI6IDEwMDAsICJjdXJyZW5jeSI6ICJVU0QifSwgInBheW1lbnRfaW5zdHJ1bWVudCI6IHsiaWQiOiAicGktMSIsICJ0eXBlIjogImNyZWRpdCJ9fV0~",
+      "ap2Reference": "wsgwvGE-beT7cNI8Fxaael85PF7YKgfhdn3m4dEE6YI"
+    },
+    {
+      "name": "valid_x5c",
+      "chain": "eyJhbGciOiJFUzI1NiIsInR5cCI6ImV4YW1wbGUrc2Qtand0IiwieDVjIjpbIk1JSUJQakNCNUtBREFnRUNBZ0lENnpBS0JnZ3Foa2pPUFFRREFqQWJNUmt3RndZRFZRUUREQkJoY0RJdGFXNTBaWEp0WldScFlYUmxNQjRYRFRJMU1ERXdNVEF3TURBd01Gb1hEVE13TURFd01UQXdNREF3TUZvd0V6RVJNQThHQTFVRUF3d0lZWEF5TFd4bFlXWXdXVEFUQmdjcWhrak9QUUlCQmdncWhrak9QUU1CQndOQ0FBUnIxX3htcGsySDQ0aGFsLWpnNG1mdDRwUm9iN3JiNkN4bG1tZU14NHhGc0hFRTBqMGtXcURPSXdjNDFXeVAxWWpSbGZOSktDZk9yTnpzUi1DVkY3MHRveUF3SGpBTUJnTlZIUk1CQWY4RUFqQUFNQTRHQTFVZER3RUJfd1FFQXdJSGdEQUtCZ2dxaGtqT1BRUURBZ05KQURCR0FpRUEya1E1ZGlpQVR6NUloaERfaThySDlUdHVZVDI4VHdPWFF0OXZiaXotMnFVQ0lRREhSdzZ2cjRodlJMMXp0b2xJNjFvLXNBQzNsSXc3c0tKMzVvVVozYnRiUkEiLCJNSUlCUVRDQjU2QURBZ0VDQWdJRDZqQUtCZ2dxaGtqT1BRUURBakFUTVJFd0R3WURWUVFEREFoaGNESXRjbTl2ZERBZUZ3MHlOVEF4TURFd01EQXdNREJhRncwek1EQXhNREV3TURBd01EQmFNQnN4R1RBWEJnTlZCQU1NRUdGd01pMXBiblJsY20xbFpHbGhkR1V3V1RBVEJnY3Foa2pPUFFJQkJnZ3Foa2pPUFFNQkJ3TkNBQVJoYnB6VnV0dTVodVBkT1d3a1FfWmJsVjRIb2o5ZFNqc3JDa2NRR1dEdkQ1VjZNYlFzeE9vT3hWUUhxTEF1YVl6WGFma1lzVHVsMVhVV2FEYk1IWDNmb3lNd0lUQVBCZ05WSFJNQkFmOEVCVEFEQVFIX01BNEdBMVVkRHdFQl93UUVBd0lCQmpBS0JnZ3Foa2pPUFFRREFnTkpBREJHQWlFQWs0TGRPdjJHZF9BVkNtbUtSR1dFX2d6QkdaMHhXX3kya2lRWUptT3A1Z0lDSVFES2ExR1pPOWdwOWpRVXh4OGJySS1GZGJHUWlJMGF5TmZ3YXBOX0hsSzhvQSJdfQ.eyJkZWxlZ2F0ZV9wYXlsb2FkIjpbeyIuLi4iOiJCRDNsRDdjSlpHZjVfQUlhZXRDTlBOWVZXZDVtNDkwdHEyX1FobkdfekFJIn1dLCJfc2RfYWxnIjoic2hhLTI1NiJ9.I7fpJtltAFC4eMkmteAi6WgWBxTxepweC569WxS3WCtfG5tmjR2xaxH1158Qho8AuV2kgGCNLU3d60SNlAdzFw~WyJUUzRGbWt6RExDWHZLM1FLMWwtNjFRIiwgeyJ2Y3QiOiAibWFuZGF0ZS5wYXltZW50Lm9wZW4uMSIsICJjb25zdHJhaW50cyI6IFt7InR5cGUiOiAicGF5bWVudC5hbW91bnRfcmFuZ2UiLCAiY3VycmVuY3kiOiAiVVNEIiwgIm1heCI6IDUwMDB9XSwgImNuZiI6IHsiandrIjogeyJjcnYiOiAiUC0yNTYiLCAia2lkIjogImFnZW50LTEiLCAia3R5IjogIkVDIiwgIngiOiAiTW9MZFI0LXRsbW9lM0ZDTDVWZXhQX2txTjgyVExlaVlOZGp2cEFIbG1kOCIsICJ5IjogInJQcUJUWHZsbHRETEctcXZoZndlRXZfRXAzaGMyWEpJb3poeldmVnJWQlkifX19XQ~~eyJhbGciOiAiRVMyNTYiLCAidHlwIjogImtiK3NkLWp3dCIsICJraWQiOiAiYWdlbnQtMSJ9.eyJkZWxlZ2F0ZV9wYXlsb2FkIjogW3siLi4uIjogIjg2ME5QWkdLQ0ZYa3VwNXFmZDhyb3gwQktoWXJWTzYyY1F5QkxPZmZBTlkifV0sICJpYXQiOiAxNzgwMDAwMDAwLCAiYXVkIjogIm1lcmNoYW50IiwgIm5vbmNlIjogIm5vbmNlLTEiLCAic2RfaGFzaCI6ICJfRHk2NVZDbGhpOU9iRjVYcV8tN1dxOW9GLWh3MU9qbVNzTXdLWHAzU1dNIiwgIl9zZF9hbGciOiAic2hhLTI1NiJ9.DTKi0hRx3vmbiZnwLCKkyLQghFAfy_hN616SvvvCk_4FD6SPc58ZClcrXIO-oLGjgopOoNsKciOfdsNMDK-GEg~WyJkRC1mMERIa1JQUGxvb3FqbWlSS2VBIiwgeyJ2Y3QiOiAibWFuZGF0ZS5wYXltZW50LjEiLCAidHJhbnNhY3Rpb25faWQiOiAidHhfMSIsICJwYXllZSI6IHsiaWQiOiAicy0xIiwgIm5hbWUiOiAiU2hvcCJ9LCAicGF5bWVudF9hbW91bnQiOiB7ImFtb3VudCI6IDEwMDAsICJjdXJyZW5jeSI6ICJVU0QifSwgInBheW1lbnRfaW5zdHJ1bWVudCI6IHsiaWQiOiAicGktMSIsICJ0eXBlIjogImNyZWRpdCJ9fV0~",
+      "ap2Reference": "MghGAYMl2ow5-5a-vYtxyG7SWe0s9aMvfN30CdpvPVQ"
+    }
+  ]
+}

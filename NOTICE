@@ -1,0 +1,9 @@
+AP2 Conformance Harness
+Copyright 2026 Good Meta
+
+This product includes golden test vectors minted from the AP2 (Agent Payments
+Protocol) reference SDK at commit e1ea56db72a6385bce3e5c1112b3a56ce60acb43
+(github.com/google-agentic-commerce/AP2, Apache-2.0). The vectors are the
+reference implementation's own output, used here for interoperability testing.
+
+Licensed under the Apache License, Version 2.0. See LICENSE.

@@ -1,0 +1,8 @@
+node_modules
+dist
+# generators write their output next to themselves on reproduction
+generators/ap2-vectors.json
+generators/ap2-hash-pairs.json
+generators/ap2-constraint-vectors.json
+generators/ap2-checkout-constraint-vectors.json
+generators/ap2-linkage-vectors.json
