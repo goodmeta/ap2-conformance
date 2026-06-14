@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AP2 Conformance — does your agent-payment verifier actually agree with AP2?</title>
+  <meta name="description" content="An open, implementation-agnostic conformance suite for AP2 (Agent Payments Protocol) mandate verification. 67 checks minted from AP2's own reference implementation. Point your verifier at it and find out where you diverge." />
+  <meta property="og:title" content="AP2 Conformance Suite" />
+  <meta property="og:description" content="67 conformance checks minted from AP2's own reference implementation. Point your verifier at it." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"></div>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top">ap2<span>·</span>conformance</a>
+      <nav class="nav-links">
+        <a href="#why">Why</a>
+        <a href="#anatomy">Anatomy</a>
+        <a href="#matrix">Checks</a>
+        <a href="#run">Run it</a>
+        <a class="ghost" href="https://github.com/goodmeta/ap2-conformance" target="_blank" rel="noopener">GitHub ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero wrap">
+      <div class="pill" id="statusPill"><span class="dot"></span> reference verifier: <strong>conformant</strong></div>
+      <h1>Does your agent-payment verifier<br /><span class="grad">actually agree with AP2?</span></h1>
+      <p class="lede">
+        AP2 mandates are the signed permission slips that prove an AI agent was allowed to spend —
+        who authorized it, how much, to whom. Every facilitator, wallet and merchant writes software
+        to <em>check</em> those slips. If they don't check identically, payments break and forgeries slip through.
+      </p>
+      <p class="lede strong">
+        This is the standardized exam. <b id="heroCount">67</b> checks — genuine slips and deliberately
+        forged ones — each with the right answer taken straight from <b>AP2's own reference implementation</b>.
+        Run your verifier against it and find out exactly where you diverge.
+      </p>
+      <div class="cta-row">
+        <a class="btn primary" href="#matrix">See the checks</a>
+        <a class="btn" href="#run">Run it on your verifier</a>
+      </div>
+      <p class="disclaimer">Independent &amp; open source · Apache-2.0 · <strong>Not</strong> an official AP2 or FIDO certification — "conformant" means it reproduces the reference implementation's behaviour.</p>
+    </section>
+
+    <!-- WHY -->
+    <section id="why" class="section wrap">
+      <h2 class="reveal">Why a conformance suite, at all</h2>
+      <p class="section-lede reveal">A spec is just prose until something pins the exact behaviour. That's how TLS, JWT and WebAuthn became trustworthy — someone built the test battery. AP2 didn't have one. Now it does.</p>
+      <div class="cards">
+        <div class="card reveal">
+          <div class="card-ic">⛓️‍💥</div>
+          <h3>Interop or chaos</h3>
+          <p>Two verifiers that don't agree means one facilitator authorizes a payment another rejects. A shared exam makes "valid" mean one thing.</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-ic">🪤</div>
+          <h3>Catch the forgeries</h3>
+          <p>Most checks are the negative ones — tampered signatures, replays, truncated chains. Every forged vector here is <em>confirmed rejected by AP2 itself</em>.</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-ic">🎯</div>
+          <h3>The answer key is the reference</h3>
+          <p>Vectors are minted from AP2's own SDK at a pinned commit — not our reading of the spec. Passing means you match AP2's <em>actual behaviour</em>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANATOMY -->
+    <section id="anatomy" class="section wrap">
+      <h2 class="reveal">Anatomy of a mandate</h2>
+      <p class="section-lede reveal">Authority flows down a chain of signed slips — by <em>key</em>, never by name. Click a guard to see what it protects and which checks enforce it.</p>
+
+      <div class="anatomy reveal">
+        <div class="chain">
+          <div class="node" data-node="root"><span class="node-role">ROOT</span><span class="node-sub">issuer authorizes a budget</span></div>
+          <div class="flow"><span class="flow-label">cnf →</span></div>
+          <div class="node" data-node="agent"><span class="node-role">AGENT</span><span class="node-sub">delegated to act</span></div>
+          <div class="flow"><span class="flow-label">cnf →</span></div>
+          <div class="node terminal" data-node="terminal"><span class="node-role">TERMINAL</span><span class="node-sub">the actual spend</span></div>
+        </div>
+        <div class="guards" id="guards"><!-- guard chips injected --></div>
+        <div class="guard-detail" id="guardDetail">
+          <div class="gd-empty">Select a guard above to see what it protects ↑</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORGERY WALKTHROUGH -->
+    <section id="walkthrough" class="section wrap">
+      <h2 class="reveal">Watch a forged slip get caught</h2>
+      <p class="section-lede reveal">A chain that's perfectly signed but replayed at the wrong merchant. The first checks pass — the binding to <em>this</em> merchant doesn't.</p>
+      <div class="terminal-sim reveal">
+        <div class="ts-bar"><span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span><span class="ts-title">verify · replayed mandate</span></div>
+        <div class="ts-body" id="tsBody"></div>
+        <button class="btn small" id="replayBtn">▶ Run verification</button>
+      </div>
+    </section>
+
+    <!-- MATRIX -->
+    <section id="matrix" class="section wrap">
+      <h2 class="reveal">Conformance, live</h2>
+      <p class="section-lede reveal">Point it at any AP2 verifier that speaks the <a href="https://github.com/goodmeta/ap2-conformance/blob/main/CONTRACT.md" target="_blank" rel="noopener">HTTP contract</a> and run the <b>chain</b> vectors against it for real — server-side, so the target's CORS doesn't matter. Prefilled with the Good Meta reference endpoint.</p>
+
+      <div class="runner reveal">
+        <div class="runner-row">
+          <input id="targetUrl" class="url-input" type="url" spellcheck="false" autocomplete="off" aria-label="verifier endpoint URL" />
+          <button class="btn primary" id="runBtn">▶ Run conformance</button>
+        </div>
+        <div id="runnerOut" class="runner-out" hidden></div>
+      </div>
+
+      <h3 class="sub reveal">Full suite — reference verifier, in-process</h3>
+      <p class="section-lede reveal">All 67 checks against <code>@goodmeta/agent-verifier</code>. <b>Core</b> = AP2's SDK agrees (must pass). <b>Hardening</b> = stricter than AP2 (informational — a spec-faithful verifier won't match these, and that's fine).</p>
+      <div class="matrix-head reveal">
+        <div class="big-stat"><span class="bs-num" data-count id="coreNum">0</span><span class="bs-of">/ <span id="coreTotal">62</span> core</span></div>
+        <div class="big-stat alt"><span class="bs-num" data-count id="hardNum">0</span><span class="bs-of">/ <span id="hardTotal">5</span> hardening</span></div>
+        <div class="verdict" id="verdict">checking…</div>
+      </div>
+      <div class="matrix" id="matrix"><!-- category rows injected --></div>
+      <p class="prov reveal">Minted from AP2 <code id="provCommit">e1ea56d</code> · canonical clock 1780000000 · <a href="https://github.com/goodmeta/ap2-conformance/blob/main/VECTORS.md" target="_blank" rel="noopener">vector schema</a></p>
+    </section>
+
+    <!-- RUN -->
+    <section id="run" class="section wrap">
+      <h2 class="reveal">Run it</h2>
+      <div class="run-grid">
+        <div class="run-col reveal">
+          <h3>Against the reference</h3>
+          <pre class="code"><span class="c-com"># clone, then</span>
+npm install
+npm run conformance</pre>
+          <p>Exits non-zero on any core failure. Drop it in CI.</p>
+        </div>
+        <div class="run-col reveal">
+          <h3>Against <em>your</em> verifier</h3>
+          <pre class="code"><span class="c-kw">import</span> { runConformance } <span class="c-kw">from</span> <span class="c-str">"@goodmeta/ap2-conformance"</span>;
+
+<span class="c-kw">const</span> report = <span class="c-kw">await</span> runConformance(myAdapter);
+process.exit(report.conformant ? 0 : 1);</pre>
+          <p>Implement six small methods (<code>Ap2VerifierAdapter</code>). Other language? The vectors are plain JSON — see the <a href="https://github.com/goodmeta/ap2-conformance/blob/main/VECTORS.md" target="_blank" rel="noopener">schema</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GLOSSARY -->
+    <section id="glossary" class="section wrap">
+      <h2 class="reveal">Decoder ring</h2>
+      <p class="section-lede reveal">The dSD-JWT chain in a dozen terms.</p>
+      <div class="glossary" id="glossary"><!-- terms injected --></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap foot-inner">
+      <div>
+        <strong>AP2 Conformance Harness</strong>
+        <p>Independent &amp; open source · Apache-2.0 · by <a href="https://goodmeta.co" target="_blank" rel="noopener">Good Meta</a>. Not affiliated with or endorsed by Google or the FIDO Alliance.</p>
+      </div>
+      <div class="foot-links">
+        <a href="https://github.com/goodmeta/ap2-conformance" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/google-agentic-commerce/AP2" target="_blank" rel="noopener">AP2 spec</a>
+        <a href="https://www.npmjs.com/package/@goodmeta/agent-verifier" target="_blank" rel="noopener">Reference verifier</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

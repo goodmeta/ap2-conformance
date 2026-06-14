@@ -10,8 +10,10 @@
   },
   "scripts": {
     "conformance": "tsx src/run.ts",
+    "gen:site": "tsx site/gen-data.ts",
     "build": "rm -rf dist && tsc",
     "typecheck": "tsc --noEmit",
+    "typecheck:api": "tsc -p tsconfig.api.json",
     "test": "tsx src/run.ts"
   },
   "files": [
@@ -32,6 +34,9 @@
     "mandate"
   ],
   "license": "Apache-2.0",
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
     "@goodmeta/agent-verifier": "0.5.0"
   },
