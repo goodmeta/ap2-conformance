@@ -1,0 +1,12 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "packageRules": [
+    {
+      "matchPackageNames": ["typescript"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false,
+      "description": "Hold TypeScript on 5.x. The 7.0 native-compiler GA drops the classic JS API (ts.sys, createProgram) that Vercel's @vercel/node builder uses to compile api/*.ts. Re-enable when the toolchain supports the native compiler."
+    }
+  ]
+}
