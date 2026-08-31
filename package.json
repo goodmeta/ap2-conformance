@@ -41,8 +41,8 @@
     "@goodmeta/agent-verifier": "0.6.0"
   },
   "devDependencies": {
-    "@types/node": "20.19.42",
-    "tsx": "4.22.4",
+    "@types/node": "24.13.3",
+    "tsx": "4.23.13",
     "typescript": "5.9.3"
   }
 }
