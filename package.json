@@ -38,7 +38,7 @@
     "node": "24.x"
   },
   "dependencies": {
-    "@goodmeta/agent-verifier": "0.5.0"
+    "@goodmeta/agent-verifier": "0.6.0"
   },
   "devDependencies": {
     "@types/node": "20.19.42",

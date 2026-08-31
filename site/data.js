@@ -295,8 +295,7 @@ window.__AP2_CONFORMANCE__ = {
       "category": "payment-constraints",
       "name": "budget_absent_required",
       "profile": "hardening",
-      "passed": false,
-      "detail": "reported a clean pass while [\"payment.budget\"] was never evaluated (AP2 also reports [])"
+      "passed": true
     },
     {
       "category": "payment-constraints",
@@ -308,8 +307,7 @@ window.__AP2_CONFORMANCE__ = {
       "category": "payment-constraints",
       "name": "amount_range_absent_required",
       "profile": "hardening",
-      "passed": false,
-      "detail": "reported a clean pass while [\"payment.amount_range\"] was never evaluated (AP2 also reports [])"
+      "passed": true
     },
     {
       "category": "payment-constraints",
@@ -321,8 +319,7 @@ window.__AP2_CONFORMANCE__ = {
       "category": "payment-constraints",
       "name": "allowed_payees_absent_required",
       "profile": "hardening",
-      "passed": false,
-      "detail": "reported a clean pass while [\"payment.allowed_payees\"] was never evaluated (AP2 also reports [])"
+      "passed": true
     },
     {
       "category": "checkout-constraints",
@@ -450,7 +447,7 @@ window.__AP2_CONFORMANCE__ = {
     "total": 65
   },
   "hardening": {
-    "passed": 5,
+    "passed": 8,
     "total": 8
   },
   "conformant": true

@@ -39,6 +39,7 @@ export const referenceAdapter: Ap2VerifierAdapter = {
       mandateContext: input.context
         ? { total_amount: input.context.total_amount, total_uses: input.context.total_uses }
         : undefined,
+      requiredConstraints: input.requiredConstraints,
     });
   },
 
