@@ -66,6 +66,17 @@ export interface Ap2VerifierAdapter {
     closed: Json;
     openCheckoutHash?: string | null;
     context?: { total_amount: number; total_uses: number } | null;
+    /**
+     * Constraint types the caller declares must have been enforced on this
+     * mandate (e.g. `["payment.budget"]`). Optional, ignored by the core profile.
+     * AP2 evaluates only the constraints PRESENT in the open mandate, so a
+     * withheld one produces no evaluator and no violation: an empty result cannot
+     * distinguish "evaluated and satisfied" from "never evaluated". A verifier
+     * targeting the hardening profile MUST report a violation when a required
+     * constraint was not evaluated, rather than returning a clean pass it cannot
+     * substantiate.
+     */
+    requiredConstraints?: string[];
   }): string[];
 
   /** Evaluate closed-world checkout constraints. Return violation strings. */

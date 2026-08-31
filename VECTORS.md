@@ -51,8 +51,20 @@ Array of:
 | `context` | `{total_amount, total_uses}` \| null | cross-presentation accumulators (budget / recurrence) |
 | `ap2Violations` | string[] | the exact violation strings AP2 produces (`[]` = satisfied) |
 | `valid` | bool | `true` ⇔ `ap2Violations` is empty |
+| `requiredConstraints` | string[]? | constraint types the caller declares must have been enforced on this mandate |
+| `hardening` | bool? | `true` ⇒ stricter-than-AP2 (AP2 reports nothing; a hardened verifier must not) — see profiles |
 
 **To run:** evaluate the closed mandate against the open mandate's constraints with the given context. The result must deep-equal `ap2Violations`, **except** for two vectors — `allowed_pisps_fail` and `preset_amount_mismatch` — where AP2 embeds a Python object `repr` in the message; for those, match the violation **count** instead of the bytes. Unknown constraint types MUST produce a violation (fail-closed), never be skipped.
+
+### The absence class (`*_absent_*`)
+
+AP2 constructs one evaluator per constraint **found in** the open mandate and never asserts which constraints ought to have been there. Under selective disclosure a holder may legitimately withhold one, so no evaluator is built and the payment clears with **zero violations**. An empty result therefore cannot distinguish *"every constraint was evaluated and satisfied"* from *"nothing was evaluated"*.
+
+Each `*_absent_silent_pass` vector records that behaviour exactly as AP2 produces it, using the same inputs as its disclosed control (`budget_over`, `amount_range_over`, `allowed_payees_fail`) so the only difference is the presence of the constraint. Those controls violate; these do not. Both facts are asserted at mint time.
+
+Each `*_absent_required` twin carries `requiredConstraints` and `hardening: true`. The caller has declared which limits it expects to have been enforced, so silence is not a pass: **a hardened verifier MUST report at least one violation** rather than certify a limit it never evaluated. The wording is the implementer's; only the count is checked. AP2 itself already has this shape for one case (`recurrence_requires_amount_budget`, where `agent_recurrence` requires `amount_range` and `budget` to be present); these generalise it.
+
+Reference: [AP2 issue #339](https://github.com/google-agentic-commerce/AP2/issues/339).
 
 ## `checkout-constraints.json` — closed-world checkout constraints
 

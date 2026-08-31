@@ -56,9 +56,9 @@ def closed_pm(**ov):
     return PaymentMandate(**d)
 
 
-def add(name, om, cm, *, hash=None, ctx=None):
+def add(name, om, cm, *, hash=None, ctx=None, required=None, hardening=False):
     violations = check_payment_constraints(om, cm, open_checkout_hash=hash, mandate_context=ctx)
-    vectors.append({
+    v = {
         "name": name,
         "open": om.model_dump(mode="json", by_alias=True, exclude_none=True),
         "closed": cm.model_dump(mode="json", by_alias=True, exclude_none=True),
@@ -66,7 +66,12 @@ def add(name, om, cm, *, hash=None, ctx=None):
         "context": {"total_amount": ctx.total_amount, "total_uses": ctx.total_uses} if ctx else None,
         "ap2Violations": violations,
         "valid": len(violations) == 0,
-    })
+    }
+    if required is not None:
+        v["requiredConstraints"] = required
+    if hardening:
+        v["hardening"] = True
+    vectors.append(v)
 
 
 def main() -> None:
@@ -117,6 +122,39 @@ def main() -> None:
     # pre-set claims (open mandate pins a field the closed mandate must keep)
     add("preset_payee_mismatch", open_pm([], payee=Merchant(id="other", name="Other")), closed_pm())
     add("preset_amount_mismatch", open_pm([], payment_amount=Amount(amount=999, currency="USD")), closed_pm())
+
+    # ── Absence class: a constraint that is NOT present is never evaluated ──
+    # AP2 builds one evaluator per constraint FOUND in the open mandate
+    # (`check_payment_constraints`, the `for constraint in open_mandate.constraints`
+    # loop) and never asserts which constraints ought to have been there. Under
+    # selective disclosure a holder may legitimately withhold a constraint, so the
+    # evaluator is never constructed and the payment clears with zero violations.
+    # The `_absent` vectors record that behaviour exactly as AP2 produces it.
+    # The `_required` twins carry `requiredConstraints`: the caller has declared
+    # which limits it expects to have been enforced, so a hardened verifier must
+    # refuse to report a clean pass it cannot substantiate. AP2 itself already has
+    # this shape for one case (`recurrence_requires_amount_budget`); these
+    # generalise it. Each pair uses the SAME inputs as its disclosed control above,
+    # so the only difference is the presence of the constraint.
+    absent = [
+        # (id, constraint, control vector it mirrors, ctx, extra closed_pm kwargs)
+        ("budget", Budget(max=50.0, currency="USD"), "budget_over", MandateContext(total_amount=4500), {}),
+        ("amount_range", AR(max=500), "amount_range_over", None, dict(payment_amount=Amount(amount=1000, currency="USD"))),
+        ("allowed_payees", AllowedPayees(allowed=[Merchant(id="only-1", name="Only")]), "allowed_payees_fail", None, {}),
+    ]
+    for cid, constraint, control, ctx, ov in absent:
+        ctype = f"payment.{cid}"
+        # Control: constraint present, so AP2 catches it. Asserted at mint time.
+        present = check_payment_constraints(
+            open_pm([constraint]), closed_pm(**ov), open_checkout_hash=None, mandate_context=ctx)
+        assert present, f"{control}: expected the disclosed control to violate, got {present}"
+        # Documented behaviour: same payment, constraint withheld, AP2 stays silent.
+        add(f"{cid}_absent_silent_pass", open_pm([]), closed_pm(**ov), ctx=ctx)
+        assert vectors[-1]["ap2Violations"] == [], \
+            f"{cid}_absent_silent_pass: expected AP2 to report nothing, got {vectors[-1]['ap2Violations']}"
+        # Hardening bar: caller declared the constraint required, so silence is not a pass.
+        add(f"{cid}_absent_required", open_pm([]), closed_pm(**ov), ctx=ctx,
+            required=[ctype], hardening=True)
 
     # ── Checkout constraints ──
     def checkout(merchant=None, items=None):

@@ -1087,5 +1087,233 @@
       "Pre-set amount mismatch: expected amount=999 currency='USD', got amount=1000 currency='USD'"
     ],
     "valid": false
+  },
+  {
+    "name": "budget_absent_silent_pass",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "openCheckoutHash": null,
+    "context": {
+      "total_amount": 4500,
+      "total_uses": 0
+    },
+    "ap2Violations": [],
+    "valid": true
+  },
+  {
+    "name": "budget_absent_required",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "openCheckoutHash": null,
+    "context": {
+      "total_amount": 4500,
+      "total_uses": 0
+    },
+    "ap2Violations": [],
+    "valid": true,
+    "requiredConstraints": [
+      "payment.budget"
+    ],
+    "hardening": true
+  },
+  {
+    "name": "amount_range_absent_silent_pass",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "openCheckoutHash": null,
+    "context": null,
+    "ap2Violations": [],
+    "valid": true
+  },
+  {
+    "name": "amount_range_absent_required",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "openCheckoutHash": null,
+    "context": null,
+    "ap2Violations": [],
+    "valid": true,
+    "requiredConstraints": [
+      "payment.amount_range"
+    ],
+    "hardening": true
+  },
+  {
+    "name": "allowed_payees_absent_silent_pass",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "openCheckoutHash": null,
+    "context": null,
+    "ap2Violations": [],
+    "valid": true
+  },
+  {
+    "name": "allowed_payees_absent_required",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "openCheckoutHash": null,
+    "context": null,
+    "ap2Violations": [],
+    "valid": true,
+    "requiredConstraints": [
+      "payment.allowed_payees"
+    ],
+    "hardening": true
   }
 ]

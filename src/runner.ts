@@ -109,11 +109,16 @@ interface PaymentCV {
   context: { total_amount: number; total_uses: number } | null;
   ap2Violations: string[];
   valid: boolean;
+  /** Constraint types the caller declares must have been enforced on this mandate. */
+  requiredConstraints?: string[];
+  /** Stricter than AP2: AP2 reports nothing here, a hardened verifier must not. */
+  hardening?: boolean;
 }
 
 function runPaymentConstraints(a: Ap2VerifierAdapter): VectorResult[] {
   const vectors = load("payment-constraints.json") as PaymentCV[];
   return vectors.map((v) => {
+    const profile: Profile = v.hardening ? "hardening" : "core";
     let passed = false;
     let detail: string | undefined;
     try {
@@ -122,17 +127,29 @@ function runPaymentConstraints(a: Ap2VerifierAdapter): VectorResult[] {
         closed: v.closed,
         openCheckoutHash: v.openCheckoutHash,
         context: v.context,
+        requiredConstraints: v.requiredConstraints,
       });
-      const validParity = (violations.length === 0) === v.valid;
-      const msgParity = REPR_ONLY.has(v.name)
-        ? violations.length === v.ap2Violations.length
-        : isDeepStrictEqual(violations, v.ap2Violations);
-      passed = validParity && msgParity;
-      if (!passed) detail = `got ${JSON.stringify(violations)} vs AP2 ${JSON.stringify(v.ap2Violations)}`;
+      if (v.hardening) {
+        // The caller declared `requiredConstraints`, and none of them are present
+        // in the open mandate, so no evaluator ran for them. AP2 returns [] and
+        // calls that a pass. A hardened verifier must refuse to certify a limit it
+        // never evaluated: any violation counts, the wording is the implementer's.
+        passed = violations.length > 0;
+        if (!passed) {
+          detail = `reported a clean pass while ${JSON.stringify(v.requiredConstraints)} was never evaluated (AP2 also reports ${JSON.stringify(v.ap2Violations)})`;
+        }
+      } else {
+        const validParity = (violations.length === 0) === v.valid;
+        const msgParity = REPR_ONLY.has(v.name)
+          ? violations.length === v.ap2Violations.length
+          : isDeepStrictEqual(violations, v.ap2Violations);
+        passed = validParity && msgParity;
+        if (!passed) detail = `got ${JSON.stringify(violations)} vs AP2 ${JSON.stringify(v.ap2Violations)}`;
+      }
     } catch (e) {
       detail = `threw: ${errMsg(e)}`;
     }
-    return { category: "payment-constraints", name: v.name, profile: "core" as Profile, passed, detail: passed ? undefined : detail };
+    return { category: "payment-constraints", name: v.name, profile, passed, detail: passed ? undefined : detail };
   });
 }
 
