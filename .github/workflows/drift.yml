@@ -1,0 +1,65 @@
+# Runs the conformance suite against the LATEST PUBLISHED @goodmeta/agent-verifier
+# rather than the version this repo pins.
+#
+# conformance.yml proves the suite passes against the pinned version, which is
+# what the repo claims conformance against and is deliberately frozen. That check
+# can stay green for weeks after a published release has broken something,
+# because nothing here installs the new one. On 2026-09-01 the pin sat at 0.6.0
+# while 0.6.1 was live, and the gap was noticed by hand rather than by CI.
+#
+# This job is the early warning. It never edits the pin: `npm install --no-save`
+# swaps the package in node_modules only, so package.json and the lockfile are
+# untouched and the committed claim keeps meaning what it says.
+#
+# A failure here does NOT mean the repo is broken. It means the newest release of
+# the verifier no longer satisfies the vectors, so either the release regressed or
+# the suite needs updating. Both are worth knowing before someone upgrades.
+
+name: drift (suite vs latest agent-verifier)
+
+on:
+  schedule:
+    # Mondays 11:00 UTC, an hour before the audit job so a red week arrives together.
+    - cron: "0 11 * * 1"
+  workflow_dispatch:
+
+jobs:
+  latest:
+    name: Conformance against latest published
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+
+      - name: Resolve pinned vs latest
+        id: versions
+        run: |
+          PINNED=$(node -p "require('./package.json').dependencies['@goodmeta/agent-verifier']")
+          LATEST=$(npm view @goodmeta/agent-verifier version)
+          echo "pinned=$PINNED" >> "$GITHUB_OUTPUT"
+          echo "latest=$LATEST" >> "$GITHUB_OUTPUT"
+          echo "pinned: $PINNED"
+          echo "latest: $LATEST"
+          if [ "$PINNED" = "$LATEST" ]; then
+            echo "::notice::Pin is current at $PINNED"
+          else
+            echo "::notice::Pin $PINNED is behind latest $LATEST — testing against $LATEST"
+          fi
+
+      - name: Install latest published (node_modules only, pin untouched)
+        run: npm install --no-save "@goodmeta/agent-verifier@${{ steps.versions.outputs.latest }}"
+
+      - name: Confirm the pin was not modified
+        run: git diff --exit-code -- package.json package-lock.json
+
+      - name: Conformance against latest
+        run: npm run conformance
+
+      - name: Explain a failure
+        if: failure()
+        run: |
+          echo "::error::Suite fails against @goodmeta/agent-verifier@${{ steps.versions.outputs.latest }} (repo pins ${{ steps.versions.outputs.pinned }}). Either that release regressed against the vectors, or the vectors need updating for it. The pinned build is unaffected; conformance.yml still covers it."
