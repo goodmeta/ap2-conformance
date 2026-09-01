@@ -2,7 +2,7 @@
  * Bakes the real conformance run into `site/data.js` so the microsite shows live
  * results with zero runtime/server. Regenerate with `npm run gen:site`.
  */
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { runConformance } from "../src/runner.js";
@@ -10,8 +10,21 @@ import { referenceAdapter } from "../src/reference-adapter.js";
 
 const report = await runConformance(referenceAdapter);
 const here = dirname(fileURLToPath(import.meta.url));
+
+// Name the exact version under test. A conformance badge that does not say WHICH
+// build it verified is only as good as the day it was generated: the page can
+// keep asserting "conformant" long after the package it measured moved on, and a
+// reader has no way to tell. The version is read from the manifest rather than
+// written by hand so it cannot fall out of step with what is installed.
+const pkg = JSON.parse(
+  readFileSync(join(here, "..", "package.json"), "utf8"),
+) as { dependencies: Record<string, string> };
+const verifierVersion = pkg.dependencies["@goodmeta/agent-verifier"];
+
 const payload = {
   generatedFor: "@goodmeta/agent-verifier (reference adapter)",
+  verifierVersion,
+  generatedAt: new Date().toISOString().slice(0, 10),
   ap2Commit: "e1ea56db72a6385bce3e5c1112b3a56ce60acb43",
   ...report,
 };

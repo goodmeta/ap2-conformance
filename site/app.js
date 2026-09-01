@@ -8,6 +8,11 @@
   /* ---------- hero + provenance ---------- */
   $("#heroCount").textContent = String(DATA.results.length || 67);
   if (DATA.ap2Commit) $("#provCommit").textContent = DATA.ap2Commit.slice(0, 7);
+  // Name the build under test. A badge that does not say WHICH version it
+  // verified keeps asserting "conformant" long after that version moved on, and
+  // a reader has no way to tell.
+  if (DATA.verifierVersion) $("#provVerifier").textContent = `@goodmeta/agent-verifier@${DATA.verifierVersion}`;
+  if (DATA.generatedAt) $("#provDate").textContent = DATA.generatedAt;
 
   /* ---------- matrix ---------- */
   const CATEGORY_ORDER = ["chain", "payment-constraints", "checkout-constraints", "checkout-chain", "receipt-reference", "hash-pairs"];
