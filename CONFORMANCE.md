@@ -39,12 +39,14 @@ The hardening checks:
 
 Failing a hardening check means an implementation follows AP2's SDK behaviour, which is **not** a conformance failure.
 
-## Where the spec and AP2's SDK disagree (not encoded as core)
+## Where AP2's docs, schemas and SDK say different things (not encoded as core)
 
-- **Receipt status field.** `agent_authorization.md` §Action Authorization defines the Mandate Receipt with `result` ∈ {`success`, `error`}. The receipt schemas (`payment_receipt.json`, `checkout_receipt.json` → `types/receipt_status.json`) and the SDK use `status` ∈ {`Success`, `Error`}. The `receipts` vectors follow the schemas and SDK.
-- **Open Checkout Mandate needs a `line_items` constraint?** `open_checkout_mandate.json` has `"contains": {"$ref": "#/$defs/line_items"}`; neither `checkout_mandate.md` nor the SDK requires it (the SDK accepts an open checkout mandate with only `allowed_merchants`). Not tested either way.
-- **Are open-mandate `constraints` optional?** `agent_authorization.md` §Mandates using SD-JWT VCs marks `constraints` OPTIONAL; both open schemas list it in `required`, and the SDK rejects its absence. Not tested either way.
-- **Schema `vct` descriptions are stale.** Each mandate schema's `vct.description` says e.g. *"MUST be 'mandate.payment'"* while its `const` is `mandate.payment.1`. The prose (§Type sections, §Mandate Versioning) and the `const` agree on the suffixed form, which is what the vectors use.
+Each item below states what the sources say and what was measured against AP2 @ `e1ea56db72a6385bce3e5c1112b3a56ce60acb43`. None of them asserts which source is intended to win.
+
+- **Receipt status field.** `agent_authorization.md` §Action Authorization defines the generic Mandate Receipt with `result` **REQUIRED** ∈ {`success`, `error`}, and says AP2 uses that model for payments. `payment_receipt.json` and `checkout_receipt.json` (→ `types/receipt_status.json`) require `status` ∈ {`Success`, `Error`} and define no `result`. Measured: a payment receipt carrying `result: "success"` instead of `status` is rejected by both `payment_receipt.json` (`'status' is a required property`) and the SDK's `PaymentReceipt` model (`status: Field required`); the same receipt with `status: "Success"` is accepted by both. The `receipts` vectors follow the schemas and SDK.
+- **`line_items` on an open Checkout Mandate.** `open_checkout_mandate.json` has `"contains": {"$ref": "#/$defs/line_items"}`, so a mandate whose only constraint is `checkout.allowed_merchants` fails the schema (`does not contain items matching the given schema`). The SDK's `OpenCheckoutMandate` model accepts that same mandate, and `checkout_mandate.md` §Constraints describes the constraints without requiring `line_items`. Not tested either way.
+- **`constraints` on open mandates.** `agent_authorization.md` marks `constraints` OPTIONAL in the generic Mandate Content; both open AP2 mandate schemas list it in `required`, and the SDK rejects its absence. This is consistent with a payments profile tightening the generic model, so it is noted, not treated as a conflict. Not tested either way.
+- **Schema `vct` descriptions omit the version suffix.** Each mandate schema's `vct.description` says e.g. *"MUST be 'mandate.payment'"* while its `const` is `mandate.payment.1`. The prose (§Type sections, §Mandate Versioning) and the `const` agree on the suffixed form, which is what the vectors use. Already reported upstream: AP2 #322, with an open fix in AP2 PR #349.
 - **`cnf` REQUIRED on an open mandate** (`agent_authorization.md` §Mandates using SD-JWT VCs) is enforced by the chain walk (`chain` → `intermediate_without_cnf`; a hop cannot verify without the prior `cnf.jwk`), so it is not re-tested at the constraint layer.
 
 ## What's deferred (honest)
