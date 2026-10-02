@@ -6,3 +6,5 @@ generators/ap2-hash-pairs.json
 generators/ap2-constraint-vectors.json
 generators/ap2-checkout-constraint-vectors.json
 generators/ap2-linkage-vectors.json
+generators/ap2-mandate-semantics.json
+generators/ap2-receipts.json

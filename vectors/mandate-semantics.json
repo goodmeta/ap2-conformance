@@ -1,0 +1,1007 @@
+[
+  {
+    "name": "payment_vct_control",
+    "mandate": "payment",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [
+        {
+          "type": "payment.amount_range",
+          "currency": "USD",
+          "max": 5000,
+          "min": 100
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "expect": "accept",
+    "ap2Outcome": "accept",
+    "rule": "Correct vct on both mandates; control for the vct negatives below.",
+    "cite": "docs/ap2/payment_mandate.md \u00a7Type; docs/ap2/specification.md \u00a7Mandate Versioning"
+  },
+  {
+    "name": "payment_closed_vct_wrong_version",
+    "mandate": "payment",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [
+        {
+          "type": "payment.amount_range",
+          "currency": "USD",
+          "max": 5000,
+          "min": 100
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.2",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Closed Payment Mandate vct MUST be exactly 'mandate.payment.1' (got 'mandate.payment.2').",
+    "cite": "docs/ap2/payment_mandate.md \u00a7Type; docs/ap2/specification.md \u00a7Mandate Versioning"
+  },
+  {
+    "name": "payment_closed_vct_no_version",
+    "mandate": "payment",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [
+        {
+          "type": "payment.amount_range",
+          "currency": "USD",
+          "max": 5000,
+          "min": 100
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Closed Payment Mandate vct MUST be exactly 'mandate.payment.1' (got 'mandate.payment').",
+    "cite": "docs/ap2/payment_mandate.md \u00a7Type; docs/ap2/specification.md \u00a7Mandate Versioning"
+  },
+  {
+    "name": "payment_closed_vct_is_open_type",
+    "mandate": "payment",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [
+        {
+          "type": "payment.amount_range",
+          "currency": "USD",
+          "max": 5000,
+          "min": 100
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.open.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Closed Payment Mandate vct MUST be exactly 'mandate.payment.1' (got 'mandate.payment.open.1').",
+    "cite": "docs/ap2/payment_mandate.md \u00a7Type; docs/ap2/specification.md \u00a7Mandate Versioning"
+  },
+  {
+    "name": "payment_open_vct_wrong_version",
+    "mandate": "payment",
+    "open": {
+      "vct": "mandate.payment.open.2",
+      "constraints": [
+        {
+          "type": "payment.amount_range",
+          "currency": "USD",
+          "max": 5000,
+          "min": 100
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Open Payment Mandate vct MUST be exactly 'mandate.payment.open.1' (got 'mandate.payment.open.2').",
+    "cite": "docs/ap2/payment_mandate.md \u00a7Type; docs/ap2/specification.md \u00a7Mandate Versioning"
+  },
+  {
+    "name": "payment_open_vct_no_version",
+    "mandate": "payment",
+    "open": {
+      "vct": "mandate.payment.open",
+      "constraints": [
+        {
+          "type": "payment.amount_range",
+          "currency": "USD",
+          "max": 5000,
+          "min": 100
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Open Payment Mandate vct MUST be exactly 'mandate.payment.open.1' (got 'mandate.payment.open').",
+    "cite": "docs/ap2/payment_mandate.md \u00a7Type; docs/ap2/specification.md \u00a7Mandate Versioning"
+  },
+  {
+    "name": "payment_open_vct_is_closed_type",
+    "mandate": "payment",
+    "open": {
+      "vct": "mandate.payment.1",
+      "constraints": [
+        {
+          "type": "payment.amount_range",
+          "currency": "USD",
+          "max": 5000,
+          "min": 100
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Open Payment Mandate vct MUST be exactly 'mandate.payment.open.1' (got 'mandate.payment.1').",
+    "cite": "docs/ap2/payment_mandate.md \u00a7Type; docs/ap2/specification.md \u00a7Mandate Versioning"
+  },
+  {
+    "name": "payment_unknown_constraint",
+    "mandate": "payment",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [
+        {
+          "type": "payment.amount_range",
+          "currency": "USD",
+          "max": 5000,
+          "min": 100
+        },
+        {
+          "type": "payment.unknown_x"
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Unknown constraint type MUST be treated as failing evaluation (even next to a satisfied one).",
+    "cite": "docs/ap2/agent_authorization.md \u00a7Verification and Processing Rules (step 3)"
+  },
+  {
+    "name": "payment_unknown_constraint_rdns",
+    "mandate": "payment",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [
+        {
+          "type": "payment.amount_range",
+          "currency": "USD",
+          "max": 5000,
+          "min": 100
+        },
+        {
+          "type": "com.example.loyalty_tier",
+          "min": "gold"
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "An rDNS-named extension constraint the verifier does not know MUST fail evaluation.",
+    "cite": "docs/ap2/agent_authorization.md \u00a7Verification and Processing Rules (step 3)"
+  },
+  {
+    "name": "payment_closed_missing_transaction_id",
+    "mandate": "payment",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [
+        {
+          "type": "payment.amount_range",
+          "currency": "USD",
+          "max": 5000,
+          "min": 100
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Closed Payment Mandate MUST include required field 'transaction_id'.",
+    "cite": "docs/ap2/agent_authorization.md \u00a7Mandates using SD-JWT VCs; code/sdk/schemas/ap2/payment_mandate.json#/required"
+  },
+  {
+    "name": "payment_closed_missing_payee",
+    "mandate": "payment",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [
+        {
+          "type": "payment.amount_range",
+          "currency": "USD",
+          "max": 5000,
+          "min": 100
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Closed Payment Mandate MUST include required field 'payee'.",
+    "cite": "docs/ap2/agent_authorization.md \u00a7Mandates using SD-JWT VCs; code/sdk/schemas/ap2/payment_mandate.json#/required"
+  },
+  {
+    "name": "payment_closed_missing_payment_amount",
+    "mandate": "payment",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [
+        {
+          "type": "payment.amount_range",
+          "currency": "USD",
+          "max": 5000,
+          "min": 100
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Closed Payment Mandate MUST include required field 'payment_amount'.",
+    "cite": "docs/ap2/agent_authorization.md \u00a7Mandates using SD-JWT VCs; code/sdk/schemas/ap2/payment_mandate.json#/required"
+  },
+  {
+    "name": "payment_closed_missing_payment_instrument",
+    "mandate": "payment",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [
+        {
+          "type": "payment.amount_range",
+          "currency": "USD",
+          "max": 5000,
+          "min": 100
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.payment.1",
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      }
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Closed Payment Mandate MUST include required field 'payment_instrument'.",
+    "cite": "docs/ap2/agent_authorization.md \u00a7Mandates using SD-JWT VCs; code/sdk/schemas/ap2/payment_mandate.json#/required"
+  },
+  {
+    "name": "payment_closed_missing_vct",
+    "mandate": "payment",
+    "open": {
+      "vct": "mandate.payment.open.1",
+      "constraints": [
+        {
+          "type": "payment.amount_range",
+          "currency": "USD",
+          "max": 5000,
+          "min": 100
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "transaction_id": "tx_1",
+      "payee": {
+        "id": "s-1",
+        "name": "Shop"
+      },
+      "payment_amount": {
+        "amount": 1000,
+        "currency": "USD"
+      },
+      "payment_instrument": {
+        "id": "pi-1",
+        "type": "credit"
+      }
+    },
+    "expect": "reject",
+    "ap2Outcome": "accept",
+    "rule": "vct is REQUIRED. AP2's SDK fills it from a model default and accepts.",
+    "cite": "docs/ap2/agent_authorization.md \u00a7Mandates using SD-JWT VCs; code/sdk/schemas/ap2/payment_mandate.json#/required",
+    "hardening": true
+  },
+  {
+    "name": "checkout_vct_control",
+    "mandate": "checkout",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.allowed_merchants",
+          "allowed": [
+            {
+              "id": "s-1",
+              "name": "Shop",
+              "website": "shop.example"
+            }
+          ]
+        },
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.checkout.1",
+      "checkout_jwt": "eyJhbGciOiAiRVMyNTYiLCAidHlwIjogIkpXVCJ9.eyJpZCI6ICJjb18xIiwgIm1lcmNoYW50IjogeyJpZCI6ICJzLTEiLCAibmFtZSI6ICJTaG9wIiwgIndlYnNpdGUiOiAic2hvcC5leGFtcGxlIn0sICJsaW5lX2l0ZW1zIjogW3siaWQiOiAibGlfQSIsICJpdGVtIjogeyJpZCI6ICJBIiwgInRpdGxlIjogIkEiLCAicHJpY2UiOiAwfSwgInF1YW50aXR5IjogMSwgInRvdGFscyI6IFt7InR5cGUiOiAidG90YWwiLCAiYW1vdW50IjogMH1dfV0sICJzdGF0dXMiOiAiY29tcGxldGVkIiwgImN1cnJlbmN5IjogIlVTRCIsICJ0b3RhbHMiOiBbeyJ0eXBlIjogInRvdGFsIiwgImFtb3VudCI6IDB9XSwgImxpbmtzIjogW3sidHlwZSI6ICJzZWxmIiwgInVybCI6ICJodHRwczovL3Nob3AuZXhhbXBsZS9jaGVja291dCJ9XX0.sig",
+      "checkout_hash": "S2VcwHtpyGXHh_mq29GESt10HYJj6YAgQOYfZSr_bWQ"
+    },
+    "expect": "accept",
+    "ap2Outcome": "accept",
+    "rule": "Correct vct on both mandates; control for the vct negatives below.",
+    "cite": "docs/ap2/checkout_mandate.md \u00a7Type; docs/ap2/specification.md \u00a7Mandate Versioning"
+  },
+  {
+    "name": "checkout_closed_vct_wrong_version",
+    "mandate": "checkout",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.allowed_merchants",
+          "allowed": [
+            {
+              "id": "s-1",
+              "name": "Shop",
+              "website": "shop.example"
+            }
+          ]
+        },
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.checkout.2",
+      "checkout_jwt": "eyJhbGciOiAiRVMyNTYiLCAidHlwIjogIkpXVCJ9.eyJpZCI6ICJjb18xIiwgIm1lcmNoYW50IjogeyJpZCI6ICJzLTEiLCAibmFtZSI6ICJTaG9wIiwgIndlYnNpdGUiOiAic2hvcC5leGFtcGxlIn0sICJsaW5lX2l0ZW1zIjogW3siaWQiOiAibGlfQSIsICJpdGVtIjogeyJpZCI6ICJBIiwgInRpdGxlIjogIkEiLCAicHJpY2UiOiAwfSwgInF1YW50aXR5IjogMSwgInRvdGFscyI6IFt7InR5cGUiOiAidG90YWwiLCAiYW1vdW50IjogMH1dfV0sICJzdGF0dXMiOiAiY29tcGxldGVkIiwgImN1cnJlbmN5IjogIlVTRCIsICJ0b3RhbHMiOiBbeyJ0eXBlIjogInRvdGFsIiwgImFtb3VudCI6IDB9XSwgImxpbmtzIjogW3sidHlwZSI6ICJzZWxmIiwgInVybCI6ICJodHRwczovL3Nob3AuZXhhbXBsZS9jaGVja291dCJ9XX0.sig",
+      "checkout_hash": "S2VcwHtpyGXHh_mq29GESt10HYJj6YAgQOYfZSr_bWQ"
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Closed Checkout Mandate vct MUST be exactly 'mandate.checkout.1'.",
+    "cite": "docs/ap2/checkout_mandate.md \u00a7Type; docs/ap2/specification.md \u00a7Mandate Versioning"
+  },
+  {
+    "name": "checkout_closed_vct_is_open_type",
+    "mandate": "checkout",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.allowed_merchants",
+          "allowed": [
+            {
+              "id": "s-1",
+              "name": "Shop",
+              "website": "shop.example"
+            }
+          ]
+        },
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.checkout.open.1",
+      "checkout_jwt": "eyJhbGciOiAiRVMyNTYiLCAidHlwIjogIkpXVCJ9.eyJpZCI6ICJjb18xIiwgIm1lcmNoYW50IjogeyJpZCI6ICJzLTEiLCAibmFtZSI6ICJTaG9wIiwgIndlYnNpdGUiOiAic2hvcC5leGFtcGxlIn0sICJsaW5lX2l0ZW1zIjogW3siaWQiOiAibGlfQSIsICJpdGVtIjogeyJpZCI6ICJBIiwgInRpdGxlIjogIkEiLCAicHJpY2UiOiAwfSwgInF1YW50aXR5IjogMSwgInRvdGFscyI6IFt7InR5cGUiOiAidG90YWwiLCAiYW1vdW50IjogMH1dfV0sICJzdGF0dXMiOiAiY29tcGxldGVkIiwgImN1cnJlbmN5IjogIlVTRCIsICJ0b3RhbHMiOiBbeyJ0eXBlIjogInRvdGFsIiwgImFtb3VudCI6IDB9XSwgImxpbmtzIjogW3sidHlwZSI6ICJzZWxmIiwgInVybCI6ICJodHRwczovL3Nob3AuZXhhbXBsZS9jaGVja291dCJ9XX0.sig",
+      "checkout_hash": "S2VcwHtpyGXHh_mq29GESt10HYJj6YAgQOYfZSr_bWQ"
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Closed Checkout Mandate vct MUST be exactly 'mandate.checkout.1'.",
+    "cite": "docs/ap2/checkout_mandate.md \u00a7Type; docs/ap2/specification.md \u00a7Mandate Versioning"
+  },
+  {
+    "name": "checkout_open_vct_wrong_version",
+    "mandate": "checkout",
+    "open": {
+      "vct": "mandate.checkout.open.2",
+      "constraints": [
+        {
+          "type": "checkout.allowed_merchants",
+          "allowed": [
+            {
+              "id": "s-1",
+              "name": "Shop",
+              "website": "shop.example"
+            }
+          ]
+        },
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.checkout.1",
+      "checkout_jwt": "eyJhbGciOiAiRVMyNTYiLCAidHlwIjogIkpXVCJ9.eyJpZCI6ICJjb18xIiwgIm1lcmNoYW50IjogeyJpZCI6ICJzLTEiLCAibmFtZSI6ICJTaG9wIiwgIndlYnNpdGUiOiAic2hvcC5leGFtcGxlIn0sICJsaW5lX2l0ZW1zIjogW3siaWQiOiAibGlfQSIsICJpdGVtIjogeyJpZCI6ICJBIiwgInRpdGxlIjogIkEiLCAicHJpY2UiOiAwfSwgInF1YW50aXR5IjogMSwgInRvdGFscyI6IFt7InR5cGUiOiAidG90YWwiLCAiYW1vdW50IjogMH1dfV0sICJzdGF0dXMiOiAiY29tcGxldGVkIiwgImN1cnJlbmN5IjogIlVTRCIsICJ0b3RhbHMiOiBbeyJ0eXBlIjogInRvdGFsIiwgImFtb3VudCI6IDB9XSwgImxpbmtzIjogW3sidHlwZSI6ICJzZWxmIiwgInVybCI6ICJodHRwczovL3Nob3AuZXhhbXBsZS9jaGVja291dCJ9XX0.sig",
+      "checkout_hash": "S2VcwHtpyGXHh_mq29GESt10HYJj6YAgQOYfZSr_bWQ"
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Open Checkout Mandate vct MUST be exactly 'mandate.checkout.open.1'.",
+    "cite": "docs/ap2/checkout_mandate.md \u00a7Type; docs/ap2/specification.md \u00a7Mandate Versioning"
+  },
+  {
+    "name": "checkout_unknown_constraint",
+    "mandate": "checkout",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.allowed_merchants",
+          "allowed": [
+            {
+              "id": "s-1",
+              "name": "Shop",
+              "website": "shop.example"
+            }
+          ]
+        },
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "type": "checkout.unknown_x"
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.checkout.1",
+      "checkout_jwt": "eyJhbGciOiAiRVMyNTYiLCAidHlwIjogIkpXVCJ9.eyJpZCI6ICJjb18xIiwgIm1lcmNoYW50IjogeyJpZCI6ICJzLTEiLCAibmFtZSI6ICJTaG9wIiwgIndlYnNpdGUiOiAic2hvcC5leGFtcGxlIn0sICJsaW5lX2l0ZW1zIjogW3siaWQiOiAibGlfQSIsICJpdGVtIjogeyJpZCI6ICJBIiwgInRpdGxlIjogIkEiLCAicHJpY2UiOiAwfSwgInF1YW50aXR5IjogMSwgInRvdGFscyI6IFt7InR5cGUiOiAidG90YWwiLCAiYW1vdW50IjogMH1dfV0sICJzdGF0dXMiOiAiY29tcGxldGVkIiwgImN1cnJlbmN5IjogIlVTRCIsICJ0b3RhbHMiOiBbeyJ0eXBlIjogInRvdGFsIiwgImFtb3VudCI6IDB9XSwgImxpbmtzIjogW3sidHlwZSI6ICJzZWxmIiwgInVybCI6ICJodHRwczovL3Nob3AuZXhhbXBsZS9jaGVja291dCJ9XX0.sig",
+      "checkout_hash": "S2VcwHtpyGXHh_mq29GESt10HYJj6YAgQOYfZSr_bWQ"
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Unknown constraint type MUST be treated as failing evaluation.",
+    "cite": "docs/ap2/agent_authorization.md \u00a7Verification and Processing Rules (step 3)"
+  },
+  {
+    "name": "checkout_closed_missing_checkout_jwt",
+    "mandate": "checkout",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.allowed_merchants",
+          "allowed": [
+            {
+              "id": "s-1",
+              "name": "Shop",
+              "website": "shop.example"
+            }
+          ]
+        },
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.checkout.1",
+      "checkout_hash": "S2VcwHtpyGXHh_mq29GESt10HYJj6YAgQOYfZSr_bWQ"
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Closed Checkout Mandate MUST include required field 'checkout_jwt'.",
+    "cite": "docs/ap2/agent_authorization.md \u00a7Mandates using SD-JWT VCs; code/sdk/schemas/ap2/checkout_mandate.json#/required"
+  },
+  {
+    "name": "checkout_closed_missing_checkout_hash",
+    "mandate": "checkout",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.allowed_merchants",
+          "allowed": [
+            {
+              "id": "s-1",
+              "name": "Shop",
+              "website": "shop.example"
+            }
+          ]
+        },
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "vct": "mandate.checkout.1",
+      "checkout_jwt": "eyJhbGciOiAiRVMyNTYiLCAidHlwIjogIkpXVCJ9.eyJpZCI6ICJjb18xIiwgIm1lcmNoYW50IjogeyJpZCI6ICJzLTEiLCAibmFtZSI6ICJTaG9wIiwgIndlYnNpdGUiOiAic2hvcC5leGFtcGxlIn0sICJsaW5lX2l0ZW1zIjogW3siaWQiOiAibGlfQSIsICJpdGVtIjogeyJpZCI6ICJBIiwgInRpdGxlIjogIkEiLCAicHJpY2UiOiAwfSwgInF1YW50aXR5IjogMSwgInRvdGFscyI6IFt7InR5cGUiOiAidG90YWwiLCAiYW1vdW50IjogMH1dfV0sICJzdGF0dXMiOiAiY29tcGxldGVkIiwgImN1cnJlbmN5IjogIlVTRCIsICJ0b3RhbHMiOiBbeyJ0eXBlIjogInRvdGFsIiwgImFtb3VudCI6IDB9XSwgImxpbmtzIjogW3sidHlwZSI6ICJzZWxmIiwgInVybCI6ICJodHRwczovL3Nob3AuZXhhbXBsZS9jaGVja291dCJ9XX0.sig"
+    },
+    "expect": "reject",
+    "ap2Outcome": "reject",
+    "rule": "Closed Checkout Mandate MUST include required field 'checkout_hash'.",
+    "cite": "docs/ap2/agent_authorization.md \u00a7Mandates using SD-JWT VCs; code/sdk/schemas/ap2/checkout_mandate.json#/required"
+  },
+  {
+    "name": "checkout_closed_missing_vct",
+    "mandate": "checkout",
+    "open": {
+      "vct": "mandate.checkout.open.1",
+      "constraints": [
+        {
+          "type": "checkout.allowed_merchants",
+          "allowed": [
+            {
+              "id": "s-1",
+              "name": "Shop",
+              "website": "shop.example"
+            }
+          ]
+        },
+        {
+          "type": "checkout.line_items",
+          "items": [
+            {
+              "id": "r1",
+              "acceptable_items": [
+                {
+                  "id": "A",
+                  "title": "A"
+                }
+              ],
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cnf": {
+        "jwk": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "x",
+          "y": "y"
+        }
+      }
+    },
+    "closed": {
+      "checkout_jwt": "eyJhbGciOiAiRVMyNTYiLCAidHlwIjogIkpXVCJ9.eyJpZCI6ICJjb18xIiwgIm1lcmNoYW50IjogeyJpZCI6ICJzLTEiLCAibmFtZSI6ICJTaG9wIiwgIndlYnNpdGUiOiAic2hvcC5leGFtcGxlIn0sICJsaW5lX2l0ZW1zIjogW3siaWQiOiAibGlfQSIsICJpdGVtIjogeyJpZCI6ICJBIiwgInRpdGxlIjogIkEiLCAicHJpY2UiOiAwfSwgInF1YW50aXR5IjogMSwgInRvdGFscyI6IFt7InR5cGUiOiAidG90YWwiLCAiYW1vdW50IjogMH1dfV0sICJzdGF0dXMiOiAiY29tcGxldGVkIiwgImN1cnJlbmN5IjogIlVTRCIsICJ0b3RhbHMiOiBbeyJ0eXBlIjogInRvdGFsIiwgImFtb3VudCI6IDB9XSwgImxpbmtzIjogW3sidHlwZSI6ICJzZWxmIiwgInVybCI6ICJodHRwczovL3Nob3AuZXhhbXBsZS9jaGVja291dCJ9XX0.sig",
+      "checkout_hash": "S2VcwHtpyGXHh_mq29GESt10HYJj6YAgQOYfZSr_bWQ"
+    },
+    "expect": "reject",
+    "ap2Outcome": "accept",
+    "rule": "vct is REQUIRED. AP2's SDK fills it from a model default and accepts.",
+    "cite": "docs/ap2/agent_authorization.md \u00a7Mandates using SD-JWT VCs; code/sdk/schemas/ap2/checkout_mandate.json#/required",
+    "hardening": true
+  }
+]
