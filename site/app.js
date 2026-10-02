@@ -6,7 +6,7 @@
   const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
 
   /* ---------- hero + provenance ---------- */
-  $("#heroCount").textContent = String(DATA.results.length || 67);
+  $("#heroCount").textContent = String(DATA.results.length);
   if (DATA.ap2Commit) $("#provCommit").textContent = DATA.ap2Commit.slice(0, 7);
   // Name the build under test. A badge that does not say WHICH version it
   // verified keeps asserting "conformant" long after that version moved on, and

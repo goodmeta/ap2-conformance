@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AP2 Conformance — does your agent-payment verifier actually agree with AP2?</title>
-  <meta name="description" content="An open, implementation-agnostic conformance suite for AP2 (Agent Payments Protocol) mandate verification. 67 checks minted from AP2's own reference implementation. Point your verifier at it and find out where you diverge." />
+  <meta name="description" content="An open, implementation-agnostic conformance suite for AP2 (Agent Payments Protocol) mandate verification. Checks minted from AP2's own reference implementation. Point your verifier at it and find out where you diverge." />
   <meta property="og:title" content="AP2 Conformance Suite" />
-  <meta property="og:description" content="67 conformance checks minted from AP2's own reference implementation. Point your verifier at it." />
+  <meta property="og:description" content="Conformance checks minted from AP2's own reference implementation. Point your verifier at it." />
   <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -40,7 +40,7 @@
         to <em>check</em> those slips. If they don't check identically, payments break and forgeries slip through.
       </p>
       <p class="lede strong">
-        This is the standardized exam. <b id="heroCount">67</b> checks — genuine slips and deliberately
+        This is the standardized exam. <b id="heroCount"></b> checks — genuine slips and deliberately
         forged ones — each with the right answer taken straight from <b>AP2's own reference implementation</b>.
         Run your verifier against it and find out exactly where you diverge.
       </p>
@@ -119,7 +119,7 @@
       </div>
 
       <h3 class="sub reveal">Full suite — reference verifier, in-process</h3>
-      <p class="section-lede reveal">All 67 checks against <code>@goodmeta/agent-verifier</code>. <b>Core</b> = AP2's SDK agrees (must pass). <b>Hardening</b> = stricter than AP2 (informational — a spec-faithful verifier won't match these, and that's fine).</p>
+      <p class="section-lede reveal">Every check against <code>@goodmeta/agent-verifier</code>. <b>Core</b> = AP2's SDK agrees (must pass). <b>Hardening</b> = stricter than AP2 (informational — a spec-faithful verifier won't match these, and that's fine).</p>
       <div class="matrix-head reveal">
         <div class="big-stat"><span class="bs-num" data-count id="coreNum">0</span><span class="bs-of">/ <span id="coreTotal">62</span> core</span></div>
         <div class="big-stat alt"><span class="bs-num" data-count id="hardNum">0</span><span class="bs-of">/ <span id="hardTotal">5</span> hardening</span></div>
