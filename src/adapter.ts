@@ -100,4 +100,23 @@ export interface Ap2VerifierAdapter {
    * the low-level `hash-pairs` category; omit to skip it.
    */
   segmentHashes?(chain: string): SegmentHashes[];
+
+  /**
+   * OPTIONAL — verify a signed AP2 Checkout or Payment Receipt (the `receipts`
+   * category; omitted ⇒ skipped). Resolve on acceptance; on ANY rejection
+   * (signature, wrong key, missing required field, `reference` not equal to the
+   * hash of the final segment of `mandateChain`) this MUST throw.
+   */
+  verifyReceipt?(input: ReceiptVerifyInput): Promise<void>;
+}
+
+export interface ReceiptVerifyInput {
+  /** Compact ES256 JWS receipt. */
+  receiptJwt: string;
+  /** The receipt issuer's public JWK (merchant for checkout, PISP/processor for payment). */
+  issuerPublicKey: Record<string, unknown>;
+  /** Which receipt schema applies. */
+  kind: "payment" | "checkout";
+  /** The closed mandate chain the receipt claims to answer (`~~`-joined dSD-JWT). */
+  mandateChain: string;
 }

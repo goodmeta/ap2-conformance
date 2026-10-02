@@ -262,14 +262,99 @@ function runHashPairs(a: Ap2VerifierAdapter): VectorResult[] {
   });
 }
 
+interface SemanticsVec {
+  name: string;
+  mandate: "payment" | "checkout";
+  open: unknown;
+  closed: unknown;
+  expect: "accept" | "reject";
+  hardening?: boolean;
+}
+
+/**
+ * Mandate-type rules (exact `vct`, unknown constraint types, required closed
+ * fields). AP2 rejects these at parse time; another verifier may report a
+ * violation instead, so a REJECT passes on either a throw or >= 1 violation. An
+ * ACCEPT passes only on zero violations and no throw.
+ */
+function runMandateSemantics(a: Ap2VerifierAdapter): VectorResult[] {
+  const vectors = load("mandate-semantics.json") as SemanticsVec[];
+  return vectors.map((v) => {
+    const profile: Profile = v.hardening ? "hardening" : "core";
+    let outcome: "accept" | "reject";
+    let got: string;
+    try {
+      const violations =
+        v.mandate === "payment"
+          ? a.checkPaymentConstraints({ open: v.open, closed: v.closed })
+          : a.verifyCheckoutChain({ open: v.open, closed: v.closed });
+      outcome = violations.length ? "reject" : "accept";
+      got = JSON.stringify(violations);
+    } catch (e) {
+      outcome = "reject";
+      got = `threw: ${errMsg(e)}`;
+    }
+    const passed = outcome === v.expect;
+    return {
+      category: "mandate-semantics",
+      name: v.name,
+      profile,
+      passed,
+      detail: passed ? undefined : `expected ${v.expect}, got ${outcome} (${got})`,
+    };
+  });
+}
+
+interface ReceiptVec {
+  name: string;
+  kind: "payment" | "checkout";
+  receiptJwt: string;
+  issuerPublicKey: Record<string, unknown>;
+  mandateChain: string;
+  expect: "accept" | "reject";
+}
+
+async function runReceipts(a: Ap2VerifierAdapter): Promise<VectorResult[]> {
+  if (!a.verifyReceipt) return []; // optional category — skipped when unimplemented
+  const vectors = load("receipts.json") as ReceiptVec[];
+  const out: VectorResult[] = [];
+  for (const v of vectors) {
+    let outcome: "accept" | "reject";
+    let got = "";
+    try {
+      await a.verifyReceipt({
+        receiptJwt: v.receiptJwt,
+        issuerPublicKey: v.issuerPublicKey,
+        kind: v.kind,
+        mandateChain: v.mandateChain,
+      });
+      outcome = "accept";
+    } catch (e) {
+      outcome = "reject";
+      got = `: ${errMsg(e)}`;
+    }
+    const passed = outcome === v.expect;
+    out.push({
+      category: "receipts",
+      name: v.name,
+      profile: "core",
+      passed,
+      detail: passed ? undefined : `expected ${v.expect}, got ${outcome}${got}`,
+    });
+  }
+  return out;
+}
+
 export async function runConformance(adapter: Ap2VerifierAdapter): Promise<RunReport> {
   const link = load("linkage.json") as LinkageFile;
   const results: VectorResult[] = [
     ...(await runChain(adapter)),
+    ...runMandateSemantics(adapter),
     ...runPaymentConstraints(adapter),
     ...runCheckoutConstraints(adapter),
     ...runCheckoutChains(adapter, link),
     ...runReceiptReferences(adapter, link),
+    ...(await runReceipts(adapter)),
     ...runHashPairs(adapter),
   ];
   const core = results.filter((r) => r.profile === "core");
