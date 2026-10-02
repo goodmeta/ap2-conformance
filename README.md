@@ -1,21 +1,23 @@
 # AP2 Conformance Harness
 
-An open, implementation-agnostic conformance suite for **AP2** (the [Agent Payments Protocol](https://github.com/google-agentic-commerce/AP2)) mandate-verification layer — the dSD-JWT delegation chain, its constraints, linkage, and receipt reference.
+An open, implementation-agnostic conformance suite for **AP2 v0.2** (the [Agent Payments Protocol](https://github.com/google-agentic-commerce/AP2)) mandate-verification layer — the dSD-JWT delegation chain, the Checkout and Payment Mandate types, their constraints, linkage, and signed receipts.
 
-The vectors are **minted from AP2's own reference SDK** (pinned at commit `e1ea56db72a6385bce3e5c1112b3a56ce60acb43`), so a passing run means your verifier matches the reference implementation's *actual behaviour* — not one more reading of the spec. Point your verifier at it and find out where you diverge.
+The vectors are **minted from AP2's own reference SDK** (pinned at commit `e1ea56db72a6385bce3e5c1112b3a56ce60acb43`, which is after the v0.2 release in AP2 PR #233), so a passing run means your verifier matches the reference implementation's *actual behaviour* — not one more reading of the spec. Point your verifier at it and find out where you diverge. AP2 v0.1 (Intent / Cart / Payment mandates) is not covered: it was replaced by v0.2 and this suite has only ever targeted v0.2.
 
 ```
 $ npm run conformance
 
   ✓ chain                  19/19 core · 4/4 hardening
-  ✓ payment-constraints    24/24 core
+  ✓ mandate-semantics      20/20 core · 2/2 hardening
+  ✓ payment-constraints    27/27 core · 3/3 hardening
   ✓ checkout-constraints   11/11 core
   ✓ checkout-chain         2/2 core · 1/1 hardening
   ✓ receipt-reference      4/4 core
+  ✓ receipts               12/12 core
   ✓ hash-pairs             2/2 core
 
-CORE:      62/62  (must be 100% to be conformant)
-HARDENING: 5/5  (optional, stricter-than-AP2)
+CORE:      97/97  (must be 100% to be conformant)
+HARDENING: 10/10  (optional, stricter-than-AP2)
 
 ✅ CONFORMANT — all core vectors pass
 ```
@@ -37,15 +39,18 @@ A suite that lumped these together would wrongly fail a spec-faithful implementa
 
 ## Coverage
 
-| Category | Core | Hardening | What it exercises |
-|---|---:|---:|---|
-| `chain` | 19 | 4 | dSD-JWT chain walk: root + KB-SD-JWT hops, `cnf` chaining, exactly-one binding (`sd_hash`/`issuer_jwt_hash`), terminal `aud`/`nonce`, ES256, x5c/kid trust |
-| `payment-constraints` | 24 | — | All payment constraint evaluators (budget, amount range, recurrence, allowed payees/instruments/PISPs, reference, execution date); unknown-constraint fail-closed; violation strings byte-exact vs AP2 |
-| `checkout-constraints` | 11 | — | Checkout constraints incl. `line_items` bipartite max-flow; `allowed_merchants` |
-| `checkout-chain` | 2 | 1 | Checkout→payment linkage; self-computed `checkout_hash` (hardening) |
-| `receipt-reference` | 4 | — | Mandate Receipt `reference` = `sd_hash` of the final SD-JWT segment (AUTH-17) |
-| `hash-pairs` | 2 | — | Per-segment canonicalization + binding-hash math, byte-exact |
-| **Total** | **62** | **5** | |
+Per-category counts are in the run output above; `npm run conformance` is the source.
+
+| Category | What it exercises |
+|---|---|
+| `chain` | dSD-JWT chain walk: root + KB-SD-JWT hops, `cnf` chaining, exactly-one binding (`sd_hash`/`issuer_jwt_hash`), terminal `aud`/`nonce`, ES256, x5c/kid trust |
+| `mandate-semantics` | Exact `vct` match incl. version suffix (open/closed, payment/checkout); unknown constraint types fail evaluation (incl. an rDNS-named extension); required closed-mandate fields; absent `vct` (hardening) |
+| `payment-constraints` | All payment constraint evaluators (budget, amount range, recurrence, allowed payees/instruments/PISPs, reference, execution date); open→closed preset claims; violation strings byte-exact vs AP2; absent-constraint class (hardening) |
+| `checkout-constraints` | Checkout constraints incl. `line_items` bipartite max-flow; `allowed_merchants` |
+| `checkout-chain` | Checkout constraints evaluated through the chain; self-computed `checkout_hash` (hardening) |
+| `receipt-reference` | Mandate Receipt `reference` = `sd_hash` of the final SD-JWT segment |
+| `receipts` | Signed Checkout / Payment Receipts: ES256 under the issuer key, schema-required fields, `reference` bound to the closed mandate presented (optional adapter method) |
+| `hash-pairs` | Per-segment canonicalization + binding-hash math, byte-exact |
 
 Every negative vector in `chain` is **confirmed rejected by AP2's own verifier at mint time**, so it is a true negative per AP2 — not merely per our assumptions. See [CONFORMANCE.md](CONFORMANCE.md) for the AP2 requirement → vector traceability and the honest list of what is deferred.
 
@@ -60,7 +65,7 @@ The reference adapter is backed by [`@goodmeta/agent-verifier`](https://www.npmj
 
 ## Point your own verifier at it
 
-Implement the [`Ap2VerifierAdapter`](src/adapter.ts) interface (six small methods — verify a chain, evaluate payment/checkout constraints, verify a checkout chain, compute a receipt reference, and optionally per-segment hashes) and run:
+Implement the [`Ap2VerifierAdapter`](src/adapter.ts) interface (small methods — verify a chain, evaluate payment/checkout constraints, verify a checkout chain, compute a receipt reference, and optionally per-segment hashes and signed-receipt verification) and run:
 
 ```ts
 import { runConformance, type Ap2VerifierAdapter } from "@goodmeta/ap2-conformance";

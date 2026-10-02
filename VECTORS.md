@@ -100,6 +100,42 @@ Array of `{ name, open, checkout, ap2Violations, valid }`. Evaluate the checkout
 
 Join `rawSplitOnDoubleTilde` with `~~`, split into segments, and for each segment reproduce: the canonicalization (`issuerJwt`, `disclosures`, `kbJwt`, `sdAlg`, `sdJwt`, `canonical`) and the hashes (`sdHash`, `issuerJwtHash`, and a `disclosureDigests` map of disclosure→digest). All byte-exact. This is the lowest layer; getting it right is a prerequisite for everything above.
 
+## `mandate-semantics.json` — mandate-type rules
+
+Array of:
+
+| field | type | meaning |
+|---|---|---|
+| `name` | string | vector id |
+| `mandate` | `"payment"` \| `"checkout"` | which mandate pair this is |
+| `open` | object | open mandate payload |
+| `closed` | object | closed mandate payload |
+| `expect` | `"accept"` \| `"reject"` | expected outcome |
+| `ap2Outcome` | `"accept"` \| `"reject"` | what AP2's SDK did at mint time |
+| `hardening` | bool? | `true` ⇒ the spec requires a reject but AP2's SDK accepts |
+| `rule`, `cite` | string | the rule encoded and its spec location at the pinned commit |
+
+**To run:** evaluate the pair the same way as the constraint categories (payment: open payment mandate constraints against the closed payment mandate; checkout: the checkout chain). `expect: "reject"` passes if your verifier **either throws or reports ≥ 1 violation** — AP2 rejects these at parse time, other verifiers may report a violation, and both are rejections. `expect: "accept"` passes only with no throw and zero violations. The wording of any violation is not checked.
+
+Covers: exact `vct` incl. the version suffix (wrong suffix, no suffix, open/closed swapped); unknown constraint types (including an rDNS-named extension) next to a satisfied known one; missing required closed-mandate fields; and, as hardening, a closed mandate with no `vct` at all.
+
+## `receipts.json` — signed Checkout / Payment Receipts
+
+Array of:
+
+| field | type | meaning |
+|---|---|---|
+| `name` | string | vector id |
+| `kind` | `"payment"` \| `"checkout"` | which receipt schema applies |
+| `receiptJwt` | string | compact ES256 JWS receipt |
+| `issuerPublicKey` | JWK | the receipt issuer's public key |
+| `mandateChain` | string | the closed mandate chain (`~~`-joined) the receipt answers |
+| `expect` | `"accept"` \| `"reject"` | expected outcome |
+| `ap2Result` | string | AP2 SDK `verify_receipt` result at mint time (`verified` or its error code) |
+| `rule`, `cite` | string | the rule encoded and its spec location |
+
+**To run:** verify the JWS signature under `issuerPublicKey`; check the payload carries the fields `required` by `payment_receipt.json` / `checkout_receipt.json`, including the `oneOf` branch for its `status` (`Success` or `Error`); and check `reference` equals the base64url `sd_hash` of the **final** segment of `mandateChain` (the same computation as `receipt-reference`). `accept` ⇒ all three hold; `reject` ⇒ any one fails. This category is optional for adapters (`verifyReceipt`).
+
 ## Two profiles
 
-The runner classifies each result as **core** (AP2's reference SDK agrees — a conformant verifier must pass) or **hardening** (stricter-than-AP2, informational). The hardening set is the 4 `chain` vectors flagged `hardening: true` plus the one `tamperHash` checkout chain. Failing a hardening check is not a conformance failure. See [README](README.md#two-profiles-core-vs-hardening).
+The runner classifies each result as **core** (AP2's reference SDK agrees — a conformant verifier must pass) or **hardening** (stricter-than-AP2, informational). The hardening set is every vector flagged `hardening: true` (in `chain`, `payment-constraints` and `mandate-semantics`) plus the `tamperHash` checkout chain. Failing a hardening check is not a conformance failure. See [README](README.md#two-profiles-core-vs-hardening).

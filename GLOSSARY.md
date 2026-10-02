@@ -117,10 +117,13 @@ hand-offs** ending at a **terminal** hop that does the actual spend.
 
 | Term | Meaning |
 |---|---|
-| **OpenPaymentMandate** | The open-ended root mandate (constraints + `cnf`), not yet a specific purchase. |
-| **PaymentMandate** | The terminal mandate naming a concrete payment (payee, amount, instrument). |
-| **IntentMandate** | A mandate expressing user intent / budget terms. |
-| **PaymentReceipt** | AP2's *receipt* format — a plain JWS (with `iss`/`result`/`reference`), a **different** thing from a mandate. |
+| **OpenPaymentMandate** | `vct` `mandate.payment.open.1`. The open-ended root mandate (constraints + `cnf`), not yet a specific purchase. |
+| **PaymentMandate** | `vct` `mandate.payment.1`. The closed mandate naming a concrete payment (transaction id, payee, amount, instrument). |
+| **OpenCheckoutMandate** | `vct` `mandate.checkout.open.1`. Constraints on which checkout an agent may complete (allowed merchants, line items) + `cnf`. |
+| **CheckoutMandate** | `vct` `mandate.checkout.1`. The closed mandate carrying the merchant-signed `checkout_jwt` and its `checkout_hash`. |
+| **PaymentReceipt / CheckoutReceipt** | AP2's *receipt* format — a plain ES256 JWS from the verifier (`status`/`iss`/`iat`/`reference`, plus `payment_id` or `order_id`), a **different** thing from a mandate. `reference` is the `sd_hash` of the final mandate in the chain. The prose in `agent_authorization.md` names the status field `result`; the schemas and SDK use `status`. |
+
+AP2 v0.1's Intent and Cart mandates were replaced by the Checkout / Payment Mandates above in v0.2 (AP2 PR #233); this suite does not test them.
 
 ## Trust models (one-line recap)
 

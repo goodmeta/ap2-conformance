@@ -2,7 +2,7 @@
 window.__AP2_CONFORMANCE__ = {
   "generatedFor": "@goodmeta/agent-verifier (reference adapter)",
   "verifierVersion": "0.6.1",
-  "generatedAt": "2026-09-01",
+  "generatedAt": "2026-10-02",
   "ap2Commit": "e1ea56db72a6385bce3e5c1112b3a56ce60acb43",
   "results": [
     {
@@ -140,6 +140,138 @@ window.__AP2_CONFORMANCE__ = {
     {
       "category": "chain",
       "name": "x5c_wrong_curve_leaf",
+      "profile": "hardening",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "payment_vct_control",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "payment_closed_vct_wrong_version",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "payment_closed_vct_no_version",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "payment_closed_vct_is_open_type",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "payment_open_vct_wrong_version",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "payment_open_vct_no_version",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "payment_open_vct_is_closed_type",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "payment_unknown_constraint",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "payment_unknown_constraint_rdns",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "payment_closed_missing_transaction_id",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "payment_closed_missing_payee",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "payment_closed_missing_payment_amount",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "payment_closed_missing_payment_instrument",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "payment_closed_missing_vct",
+      "profile": "hardening",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "checkout_vct_control",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "checkout_closed_vct_wrong_version",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "checkout_closed_vct_is_open_type",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "checkout_open_vct_wrong_version",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "checkout_unknown_constraint",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "checkout_closed_missing_checkout_jwt",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "checkout_closed_missing_checkout_hash",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "mandate-semantics",
+      "name": "checkout_closed_missing_vct",
       "profile": "hardening",
       "passed": true
     },
@@ -432,6 +564,78 @@ window.__AP2_CONFORMANCE__ = {
       "passed": true
     },
     {
+      "category": "receipts",
+      "name": "payment_receipt_valid",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "receipts",
+      "name": "payment_receipt_valid_3hop",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "receipts",
+      "name": "payment_receipt_wrong_key",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "receipts",
+      "name": "payment_receipt_tampered_payload",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "receipts",
+      "name": "payment_receipt_reference_mismatch",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "receipts",
+      "name": "payment_receipt_reference_is_root_hash",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "receipts",
+      "name": "payment_receipt_missing_payment_id",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "receipts",
+      "name": "payment_receipt_missing_reference",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "receipts",
+      "name": "payment_receipt_error_without_error_code",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "receipts",
+      "name": "checkout_receipt_valid",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "receipts",
+      "name": "checkout_receipt_reference_mismatch",
+      "profile": "core",
+      "passed": true
+    },
+    {
+      "category": "receipts",
+      "name": "checkout_receipt_wrong_key",
+      "profile": "core",
+      "passed": true
+    },
+    {
       "category": "hash-pairs",
       "name": "segment[0]",
       "profile": "core",
@@ -445,12 +649,12 @@ window.__AP2_CONFORMANCE__ = {
     }
   ],
   "core": {
-    "passed": 65,
-    "total": 65
+    "passed": 97,
+    "total": 97
   },
   "hardening": {
-    "passed": 8,
-    "total": 8
+    "passed": 10,
+    "total": 10
   },
   "conformant": true
 };

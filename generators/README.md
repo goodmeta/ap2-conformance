@@ -10,6 +10,12 @@ reproduce them and confirm AP2 accepts/rejects exactly what we claim.
   AP2's own `chain_tests.py` flow.
 - `gen_ap2_constraint_vectors.py` — payment + checkout constraint vectors and the
   linkage/receipt vectors.
+- `gen_ap2_v02_vectors.py` — `mandate-semantics.json` (exact `vct`, unknown
+  constraint types, required closed fields) and `receipts.json` (signed
+  Checkout / Payment Receipts, via AP2's `ReceiptClient` and `jwt_helper`). It
+  reads the committed `../vectors/chain.json` for its payment chains and mints
+  one checkout chain of its own, so it never rewrites the other generators'
+  output. Run it after the other two.
 
 ## Reproduce
 
@@ -19,6 +25,7 @@ python3.13 -m venv /tmp/ap2venv
   "git+https://github.com/google-agentic-commerce/AP2.git@e1ea56db72a6385bce3e5c1112b3a56ce60acb43"
 /tmp/ap2venv/bin/python gen_ap2_vectors.py
 /tmp/ap2venv/bin/python gen_ap2_constraint_vectors.py
+/tmp/ap2venv/bin/python gen_ap2_v02_vectors.py
 ```
 
 The scripts write their output next to themselves (gitignored). Each negative

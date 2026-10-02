@@ -15,7 +15,7 @@
   if (DATA.generatedAt) $("#provDate").textContent = DATA.generatedAt;
 
   /* ---------- matrix ---------- */
-  const CATEGORY_ORDER = ["chain", "payment-constraints", "checkout-constraints", "checkout-chain", "receipt-reference", "hash-pairs"];
+  const CATEGORY_ORDER = ["chain", "mandate-semantics", "payment-constraints", "checkout-constraints", "checkout-chain", "receipt-reference", "receipts", "hash-pairs"];
   const byCat = new Map();
   for (const r of DATA.results) {
     if (!byCat.has(r.category)) byCat.set(r.category, []);
@@ -113,10 +113,10 @@
       vectors: ["aud_mismatch", "nonce_mismatch", "truncation-reject"] },
     { id: "constraints", label: "constraints", title: "The spend obeys the authorized limits",
       plain: "The concrete purchase must satisfy the open mandate's limits — budget, amount range, allowed payees/instruments, recurrence, execution window. Unknown constraints fail closed, they're never skipped.",
-      vectors: ["payment-constraints ×24", "checkout-constraints ×11"] },
+      vectors: ["mandate-semantics", "payment-constraints", "checkout-constraints"] },
     { id: "receipt", label: "receipt reference", title: "A tamper-proof link for receipts",
-      plain: "The Mandate Receipt reference is the hash of the final slip, recomputed from bytes — so receipts and disputes point at exactly what was verified, never a trusted claim.",
-      vectors: ["receipt-reference ×4"] },
+      plain: "The Mandate Receipt reference is the hash of the final slip, recomputed from bytes — so receipts and disputes point at exactly what was verified, never a trusted claim. Signed receipts must verify under the issuer's key.",
+      vectors: ["receipt-reference", "receipts"] },
   ];
   const guardsEl = $("#guards");
   const detailEl = $("#guardDetail");
