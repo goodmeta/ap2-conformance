@@ -6,7 +6,7 @@ AP2's core verification step is *"verify and process the SD-JWT chain according 
 
 - **Pin:** AP2 repo `google-agentic-commerce/AP2`, commit `e1ea56db72a6385bce3e5c1112b3a56ce60acb43`. That commit is after the v0.2 release (`b4587ac`, PR #233), so this suite targets **AP2 v0.2** (Checkout + Payment Mandates, open/closed). AP2 v0.1's Intent / Cart mandates are not tested; they no longer exist in the spec.
 - **Positive vectors** carry the per-hop payloads / violation strings / hashes AP2's SDK produces.
-- **Negative vectors** are each **confirmed rejected by AP2's own SDK at mint time** — a true negative per AP2, not per our assumptions. The `mandate-semantics` and `receipts` vectors record AP2's outcome alongside each one (`ap2Outcome` / `ap2Result`).
+- **Core negative vectors** are each **confirmed rejected by AP2's own SDK at mint time** — a true negative per AP2, not per our assumptions. Hardening negatives are the opposite by definition: the generators assert AP2's SDK *accepts* them (see [Core vs hardening](#core-vs-hardening)). The `mandate-semantics` and `receipts` vectors record AP2's outcome alongside each one (`ap2Outcome` / `ap2Result`).
 - **Canonical clock** `1780000000` for every time check (chain `iat`/`exp` and x509 validity), so runs are reproducible.
 
 ## Coverage by AP2 layer
